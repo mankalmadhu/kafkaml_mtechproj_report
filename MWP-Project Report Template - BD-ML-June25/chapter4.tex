@@ -362,35 +362,64 @@ After the successful submission of both the model control and data control datas
 
 The ability to deploy the federated module and trigger a training job using the control datasets submitted via the Django Admin UI confirmed the operational status of these critical components. This lays the groundwork for expanding to truly distributed data sources and integrating blockchain functionalities as outlined in the project plan.
 
+\subsection{Setup of Single Federated Classic Training for Occupancy Dataset}
+\label{subsec:single_fed_classic_occupancy}
+
+With the core federated services validated on MNIST, the next milestone was to exercise the end-to-end pipeline using the room occupancy dataset. This scenario activates the ``single federated classic'' path—one federated worker representing an edge site, but now consuming realistic sensor streams and producing blockchain-ready control records.
+
+\begin{enumerate}
+    \item \textbf{Build Kafka-ML base images:} From the repository root, the `./build.sh` script compiled the frontend, backend, model training, model inference, and logger services. Configuration bundles were updated to reference the occupancy-specific Kafka topics.
+
+    \item \textbf{Build federated module images:} Inside `federated-module/`, executing its `./build.sh` produced the federated backend, model/data control loggers, and TensorFlow training worker images, embedding the smart-contract artefacts and wallet credentials required for later auditing.
+
+    \item \textbf{Deploy Kafka-ML core via Kustomize:} Applying `kubectl apply -k kustomize/local` brought up the classic services configured to expose the APIs needed for federated orchestration of the occupancy use case.
+
+    \item \textbf{Deploy federated services via Kustomize:} The command `kubectl apply -k federated-module/kustomize/local` launched the federated backend, control loggers, worker job template, and blockchain helpers. All pods were verified in `Running` state before proceeding.
+
+    \item \textbf{Register model, configuration, and deployment:} Through the Kafka-ML frontend UI a TensorFlow CNN tailored to the occupancy dataset was uploaded, the configuration enabled federated learning, and the deployment bound the model to the occupancy data stream with the desired aggregation cadence.
+
+    \item \textbf{Controller job activation:} Creating the deployment triggered the federated controller job, which fetched the model artefact and control payload from Kafka and acknowledged receipt back to the backend.
+
+    \item \textbf{Backend receives model metadata:} The federated backend stored the architecture and control envelope, persisting hashes to the blockchain where configured, and waited for matching data control messages.
+
+    \item \textbf{Occupancy data ingestion:} A dedicated injector streamed occupancy sensor readings to the Kafka data topic while publishing the control metadata (client ID, shard size, offsets) to the federated data control topic.
+
+    \item \textbf{Collision detection and worker launch:} When matching model and data control entries appeared, the federated backend triggered the single-worker Kubernetes job. The worker retrieved the model weights, consumed the referenced occupancy batch, and commenced local training.
+
+    \item \textbf{Local training and result publication:} After completing its epochs, the worker emitted training and validation metrics, uploaded the updated weights to the aggregation topic, and recorded the contribution on the blockchain. The controller then performed aggregation (trivial with a single worker) and prepared for the next data chunk.
+\end{enumerate}
+
+Placeholder panels below will be populated with screenshots from this occupancy walkthrough (build logs, frontend submissions, controller status, worker metrics) once the experiment gallery is finalised.
+
 \begin{figure}[h!]
     \centering
     \begin{adjustbox}{bgcolor=gray!20, padding=0.7em, margin=1ex}
         \begin{tabular}{cc}
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Federated controller pod status}}
-                \caption{Controller Pods}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Kafka-ML build script output}}
+                \caption{Kafka-ML Build}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Backend UI with control entries}}
-                \caption{Control Entries}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Federated module build output}}
+                \caption{Federated Build}
             \end{subfigure} \\
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Data injector publishing occupancy events}}
-                \caption{Data Injection}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Frontend deployment showing occupancy model}}
+                \caption{Frontend Flow}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker training metrics view}}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker training metrics}}
                 \caption{Worker Metrics}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Reserved placeholders for occupancy-focused federated walkthrough}
-    \label{fig:occupancy_placeholders}
+    \caption{Placeholder grid for single federated classic occupancy run}
+    \label{fig:occupancy_fed_single}
 \end{figure}
 
 
