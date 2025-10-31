@@ -1,4 +1,5 @@
 \chapter{Experiment Environment}
+\label{chap:environment}
 
 \section{Overview}
 
@@ -7,34 +8,34 @@ This chapter documents the environment used to generate the results in Chapter~\
 \section{Scenario Configuration}
 \label{sec:scenario_config}
 
-The entry point for the experiments is the YAML file `configs/occupancy_federated_3device_faulty.yaml`. Its key sections are summarised below:
+The entry point for the experiments is the YAML file \texttt{configs/occupancy\_federated\_3device\_faulty.yaml}. Its key sections are summarised below:
 
 \begin{itemize}
     \item \textbf{Model}: defines a TensorFlow binary-classification network with three dense layers and dropout, compiled with Adam and weighted metrics.
     \item \textbf{Configuration}: binds the model to the federated training workflow and provides descriptive metadata for traceability.
     \item \textbf{Deployment}: enables federated training with blockchain logging, sets five aggregation rounds, specifies the FedAvg aggregation strategy (extended to FedAvg\,+ when configured), and declares minimum sample requirements per round.
-    \item \textbf{Data Injection}: lists common Kafka parameters, toggles streaming chunk support, and outlines device-specific topics, control channels, and dataset files (including one faulty source).
+\item \textbf{Data Injection}: lists common Kafka parameters, toggles streaming chunk support, and outlines device-specific topics, control channels, and dataset files (including one faulty source).
     \item \textbf{Inference}: configures the inference deployment, including the RAW input format, Kafka topics, and the number of predictions captured after each run.
 \end{itemize}
 
-Together these sections fully describe the payloads passed to `automate_e2e.py` when launching experiments.
+Together these sections fully describe the payloads passed to \texttt{automate\_e2e.py} when launching experiments.
 
 \section{Dataset Partitioning and Fault Injection}
 \label{sec:dataset_partitioning}
 
-Each federated device consumes a dedicated dataset stored under `datasets/`:
+Each federated device consumes a dedicated dataset stored under \texttt{datasets/}:
 
 \begin{itemize}
-    \item `device1_data.txt` and `device2_data.txt` contain clean occupancy readings drawn from the canonical training set, providing approximately 3{,}000 samples per device after preprocessing.
-    \item `datatraining_faulty.txt` injects corrupted or biased readings to emulate a misbehaving edge node; the automation script flags this device via `faulty_device: true` in the YAML.
+    \item \texttt{device1\_data.txt} and \texttt{device2\_data.txt} contain clean occupancy readings drawn from the canonical training set, providing approximately 3{,}000 samples per device after preprocessing.
+    \item \texttt{datatraining\_faulty.txt} injects corrupted or biased readings to emulate a misbehaving edge node; the automation script flags this device via \texttt{faulty\_device: true} in the YAML.
 \end{itemize}
 
-The automation layer loads these files through \texttt{OccupancyDataset}, normalises the features, and (optionally) computes per-device label weights. Validation rates (20\%) are applied consistently so the backend can split training and validation subsets deterministically. The faulty device is crucial for evaluating robustness of dynamic sampling and FedAvg\,+ in Chapter~\ref{sec:fedavg_plus_eval}.
+The automation layer loads these files through \texttt{OccupancyDataset}, normalises the features, and (optionally) computes per-device label weights. Validation rates (20\%) are applied consistently so the backend can split training and validation subsets deterministically. The faulty device is crucial for evaluating robustness of dynamic sampling and FedAvg\,+ in the subsequent results chapter.
 
 \section{Per-Device Deployment Layout}
 \label{sec:deployment_layout}
 
-Device-specific Kubernetes overlays reside under `federated-module/kustomize/dev1`, `dev2`, and `dev3`. Each overlay wires the following components to a unique namespace:
+Device-specific Kubernetes overlays reside under \texttt{federated-module/kustomize/dev1}, \texttt{dev2}, and \texttt{dev3}. Each overlay wires the following components to a unique namespace:
 
 \begin{itemize}
     \item federated backend and control loggers pointed at device-specific topics;
