@@ -362,35 +362,52 @@ After the successful submission of both the model control and data control datas
 
 The ability to deploy the federated module and trigger a training job using the control datasets submitted via the Django Admin UI confirmed the operational status of these critical components. This lays the groundwork for expanding to truly distributed data sources and integrating blockchain functionalities as outlined in the project plan.
 
+\begin{figure}[h!]
+    \centering
+    \begin{adjustbox}{bgcolor=gray!20, padding=0.7em, margin=1ex}
+        \begin{tabular}{cc}
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Federated controller pod status}}
+                \caption{Controller Pods}
+            \end{subfigure} &
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Backend UI with control entries}}
+                \caption{Control Entries}
+            \end{subfigure} \\
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Data injector publishing occupancy events}}
+                \caption{Data Injection}
+            \end{subfigure} &
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker training metrics view}}
+                \caption{Worker Metrics}
+            \end{subfigure}
+        \end{tabular}
+    \end{adjustbox}
+    \vskip\baselineskip
+    \caption{Reserved placeholders for occupancy-focused federated walkthrough}
+    \label{fig:occupancy_placeholders}
+\end{figure}
 
-\subsection{Setup of Single Federated Classic Training for Occupancy Dataset}
-\label{subsec:single_fed_classic_occupancy}
 
-With the core federated services validated on MNIST, the next milestone was to exercise the end-to-end pipeline using the room occupancy dataset. This scenario activates the ``single federated classic'' path—one federated worker representing an edge site, but now consuming realistic sensor streams and producing blockchain-ready control records.
+\subsection{Federated Training with Blockchain Instrumentation}
+\label{subsec:fed_blockchain_setup}
 
-\begin{enumerate}
-    \item \textbf{Build Kafka-ML base images:} From the repository root, the `./build.sh` script was executed to compile the frontend, backend, model training, model inference, and supporting logger services. The build reused the earlier container recipes but updated configuration bundles to point at the occupancy-specific topics.
+The blockchain-enabled run reuses the deployment steps from Section~\ref{subsec:federated_setup_non_distributed}: the same build scripts prepare Kafka-ML and federated images, Kustomize descriptors deploy the pods, and the frontend initiates the model/config/deployment objects. The change lies in the artefacts: controller and worker jobs reference the blockchain-specific manifests, smart-contract credentials, and emit on-chain audit trails during training.
 
-    \item \textbf{Build federated module images:} Inside `federated-module/`, the module-specific `./build.sh` packaged the federated backend, model/data control loggers, and TensorFlow training worker. This step also injected the smart-contract artefacts and wallet credentials required for logging client activity.
+Key behavioural differences from the vanilla run include:
 
-    \item \textbf{Deploy Kafka-ML core via Kustomize:} The base platform was deployed to the local Kubernetes cluster with `kubectl apply -k kustomize/local`. This brought up the classic services (frontend, backend, model training, inference, Kafka control logger) configured to expose the APIs needed for federated orchestration.
+\begin{itemize}
+    \item Controller pods carry the `*-blockchain-controller` naming convention and, after each round, log transaction hashes confirming that model control messages were notarised on the contract.
+    \item Federated workers publish their contribution metadata to the blockchain, producing log entries that show token reward calculations (loss/accuracy deltas) before pushing aggregation control messages.
+    \item The backend wallet ledger reflects credit transfers per round, enabling traceable incentive payouts per client.
+\end{itemize}
 
-    \item \textbf{Deploy federated services via Kustomize:} Running `kubectl apply -k federated-module/kustomize/local` launched the federated backend, control loggers, federated training job template, and auxiliary blockchain helpers. Health checks confirmed all pods were in `Running` state before proceeding.
-
-    \item \textbf{Register model, configuration, and deployment:} Using the Kafka-ML frontend UI, a TensorFlow CNN tailored to the occupancy dataset was uploaded. The configuration toggled the ``Federated Learning'' flag, pointing to the federated training plan, and the deployment bound the model to the occupancy data stream with the appropriate aggregation cadence.
-
-    \item \textbf{Controller job activation:} The deployment creation triggered the federated controller job, which fetched the model artefact and control payload from Kafka and acknowledged receipt back to the backend.
-
-    \item \textbf{Backend receives model metadata:} The federated backend stored both the architecture and the control envelope, persisting hashes to the blockchain where applicable, and waited for matching data control messages.
-
-    \item \textbf{Occupancy data ingestion:} A dedicated data injector script streamed occupancy sensor readings to the Kafka data topic while simultaneously posting the control metadata (client ID, shard size, offsets) to the federated data control topic.
-
-    \item \textbf{Collision detection and worker launch:} Upon seeing matching model and data control entries, the federated backend triggered the single-worker Kubernetes job. The job retrieved the model weights, consumed the occupancy batch referenced by the control message, and started local training.
-
-    \item \textbf{Local training and result publication:} After completing its epochs, the worker emitted training and validation metrics, uploaded the updated weights to the aggregation topic, and recorded the contribution on the blockchain. The controller then proceeded with aggregation (trivial in the single-worker case) and recycled the round for subsequent data chunks.
-\end{enumerate}
-
-To support documentation and future replication, screenshots were captured at each of the major steps. Placeholder slots for these visuals are reserved below and will be populated as the dataset experiments stabilise.
+Placeholder screenshots below will be populated with the blockchain-specific controller and worker logs, contract dashboards, and reward summaries once the full experiment set is captured.
 
 \begin{figure}[h!]
     \centering
@@ -398,29 +415,29 @@ To support documentation and future replication, screenshots were captured at ea
         \begin{tabular}{cc}
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Build scripts running for Kafka-ML core (placeholder)}}
-                \caption{Kafka-ML Build}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Blockchain-enabled controller pod logs}}
+                \caption{Controller Logs}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Federated module build output (placeholder)}}
-                \caption{Federated Build}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker reward calculation output}}
+                \caption{Reward Metrics}
             \end{subfigure} \\
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Frontend deployment of federated model/config (placeholder)}}
-                \caption{Frontend Flow}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Smart contract dashboard snapshot}}
+                \caption{Contract Dashboard}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Federated worker training logs (placeholder)}}
-                \caption{Worker Training}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Backend wallet transaction list}}
+                \caption{Wallet Activity}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Placeholder grid for single federated classic occupancy run}
-    \label{fig:occupancy_fed_single}
+    \caption{Placeholder grid for blockchain-instrumented federated training}
+    \label{fig:blockchain_fed_placeholders}
 \end{figure}
 
 
