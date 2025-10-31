@@ -1,15 +1,22 @@
-\chapter{Platform Enhancements}
+\chapter{Kafka-ML Platform Enhancements}
 
 \section{Overview}
 
-This chapter documents the key enhancements introduced during the project to extend Kafka-ML beyond the baseline described in Chapter~\ref{chap:results_analyses}. The work focused on strengthening the automation, fairness, and robustness of the federated learning pipeline that powers smart building occupancy prediction. The contributions are organised into four thematic areas:
+This chapter documents the key enhancements introduced during the project to extend Kafka-ML beyond the baseline described in Chapter~\ref{chap:kafkaml_setup}. The work focused on strengthening the automation, fairness, and robustness of the federated learning pipeline that powers smart building occupancy prediction. The contributions are organised into four thematic areas:
 
 \begin{itemize}
-    \item \textbf{End-to-End Automation Layer:} A reusable orchestration framework (`e2e\_scripts/`) that can provision Kafka-ML components, drive experiments, and capture artefacts without manual intervention.
+    \item \textbf{End-to-End Automation Layer:} A reusable orchestration framework that can provision Kafka-ML components, drive experiments, and capture artefacts without manual intervention.
     \item \textbf{Occupancy Dataset Integration:} Dataset-specific formatting, control messages, and configuration hooks that seamlessly plug the occupancy workload into the automation layer and federated services.
     \item \textbf{Dynamic Sampling for Federated Training:} Label-weight aware data injection and weighted loss handling in the federated training module to mitigate class imbalance and reward under-represented events.
     \item \textbf{Advanced Aggregation and Streaming Improvements:} Enhancements to the aggregation logic (FedAvg\,+ with device registration and Krum-inspired filtering) and incremental chunk processing so that federated rounds operate on streaming sensor data.
 \end{itemize}
 
-Each subsequent section explains the design rationale, code-level changes, and interactions with existing Kafka-ML components for these additions. Execution setup, metrics, and outcome analysis are deliberately deferred to Chapters~6 and~7.
+Each subsequent section explains the design rationale, code-level changes, and interactions with existing Kafka-ML components for these additions. Execution setup, metrics, and outcome analysis are delegated to Chapters~6 and~7.
+
+\section{End-to-End Automation Layer}
+\label{sec:automation_layer}
+
+The automation framework centres on `automate\_e2e.py`, which provides a single entry point for orchestrating complete Kafka-ML experiments. The script loads a YAML configuration, instantiates the appropriate dataset handler (currently MNIST or occupancy), and then delegates execution to `PipelineRunner` in `lib/pipeline_runner.py`. The runner interprets the configuration to perform a deterministic sequence of phases: verifying or building container artefacts, applying Kustomize overlays for Kafka-ML and federated services, submitting model/configuration/deployment objects through the backend API, triggering federated controllers, driving data injection, and capturing logs plus summary artefacts (`automation_*.log`, `automation_results.json`).
+
+The `configs/` directory contains scenario definitions that separate automation logic from workload specifics; command-line flags (e.g., `--skip`, `--pause`) allow operators to bypass stages or step through them interactively. Dataset modules under `datasets/` encapsulate data preparation and inference test hooks so new workloads can be dropped into the same pipeline without touching orchestration code, while helpers in `lib/` (Kafka topic utilities, Kubernetes orchestration, blockchain interactions) keep environment control reusable across scenarios. This modular structure enables the subsequent enhancements (Sections~\ref{sec:occupancy_integration}--\ref{sec:incremental_federated}) to plug into the same automation backbone without duplicating setup boilerplate.
 
