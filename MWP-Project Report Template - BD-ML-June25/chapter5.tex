@@ -1,0 +1,22 @@
+\chapter{Conclusion and Future Work}
+
+With the foundational components of both classic and federated learning architectures successfully set up and tested using the MNIST dataset, the second phase of the project will focus on extending these capabilities to address the primary objectives of developing a fair, secure, and efficient federated learning system for smart building occupancy prediction. The key areas of development for the next phase include:
+
+\begin{itemize}
+    \item \textbf{Setup for Distributed and Incremental Federated Learning:}
+    The current federated setup will be enhanced to support truly distributed data sources, simulating multiple clients (e.g., different rooms or sensors in a smart building). This will involve configuring the system for incremental federated learning, where clients can join the training process at different times and contribute their local data updates asynchronously.
+
+    \item \textbf{Blockchain Integration for Enhanced Trust and Transparency:}
+    A significant focus will be the integration of blockchain technology, specifically exploring options like Ethereum (as initially planned) or potentially Solarium if deemed more suitable, into the federated learning training process. This integration aims to provide a transparent and auditable ledger for tracking model updates, client contributions, and managing incentives, thereby enhancing the trustworthiness and fairness of the system. The blockchain will be particularly crucial when aggregating weights from various clients, ensuring the integrity of this process.
+
+    \item \textbf{Introduction of Advanced Aggregation Methods:}
+    Currently, the system primarily utilizes a standard Federated Averaging (FedAvg) strategy for aggregating client model weights. Future work will involve implementing and evaluating additional, more sophisticated aggregation methods. This could include strategies designed to handle data heterogeneity across clients, improve model robustness, or further enhance fairness in the aggregation process.
+
+    \item \textbf{Mechanism for Training with Room Occupancy Data:}
+    The system will be adapted to utilize the specialized room occupancy dataset. This involves developing data loaders and preprocessing pipelines suitable for real-time sensor data streams (e.g., temperature, humidity, CO2, light). The model architecture itself may also need to be tailored for time-series occupancy prediction tasks, potentially leveraging architectures like LSTMs as explored in the literature.
+
+    \item \textbf{Optional: Inferencing and Visualization for Room Occupancy Data:}
+    Depending on the progress and available time, capabilities for performing inference using the trained room occupancy prediction model will be developed. This would include creating an interface or mechanism to input real-time or historical sensor data and receive occupancy predictions. Furthermore, visualization tools will be explored to present these inference results in an intuitive manner, which can aid in understanding model performance and the dynamics of room occupancy.
+\end{itemize}
+
+Successfully implementing these next steps will move the project significantly closer to achieving a novel, fair, and secure federated learning system for practical applications like smart building energy efficiency.

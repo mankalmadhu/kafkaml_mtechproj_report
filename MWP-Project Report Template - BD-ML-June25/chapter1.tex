@@ -1,0 +1,59 @@
+\chapter{Introduction}
+
+\section{Introduction}
+\label{sec:introduction}
+
+This project centers on the convergence of three key technologies: \textbf{Federated Learning (FL)}, \textbf{Kafka-ML}, and \textbf{Blockchain}.
+Federated Learning facilitates the construction of distributed, privacy-preserving machine learning (ML) models using data from decentralized sources \cite{mcmahan2017communication,konevcny2016federated}.
+Kafka-ML provides a robust framework for creating ML pipelines that can handle streaming datasets, thereby enabling flexible, real-time collaboration among participants.
+Complementing these, Blockchain technology offers a mechanism to enhance accountability and improve the tracking of contributions from individual data sources within a federated learning environment.
+The core proposal of this research is to integrate these concepts to develop federated models that are both enhanced in terms of trustworthiness and fairness.
+This will be achieved through strategies such as dynamic training data sampling, which aims to ensure a balanced representation of classes, and the implementation of weighted fair training algorithms designed to reduce bias during the model training process.
+The practical application and demonstration of this integrated system will focus on \textbf{Smart Building Occupancy Prediction}, utilizing real-time sensor data streams to predict room occupancy.
+\section{Problem Statement}
+\label{sec:problem_statement}
+
+The motivation for this project stems from several interconnected challenges in current machine learning and smart building management practices:
+
+\begin{itemize}
+    \item \textbf{Traditional ML Privacy Concerns:} Centralized machine learning approaches, when applied to smart building management, inherently raise significant data privacy issues.
+This is due to the necessary collection of potentially sensitive data from a multitude of sensors and devices deployed within occupied spaces.
+    \item \textbf{FL Accountability Limitations:} While existing federated learning (FL) frameworks enhance privacy by decentralizing the model training process, they often lack comprehensive mechanisms to ensure transparency, auditability, and fairness concerning client contributions and subsequent model updates.
+    \item \textbf{Need for Trustworthy FL Models:} The implementation of asynchronous federated learning, especially with numerous clients as anticipated in smart building scenarios, demands a reliable and robust system.
+Such a system must be capable of accurately tracking model weight updates and fairly incentivizing participation in a manner that is both transparent and tamper-proof.
+    \item \textbf{Real-Time Data Utilization for Energy Efficiency:} There is a pressing need for a solution that can effectively leverage real-time data streams originating from various smart devices and sensors.
+This capability is crucial for continuous and adaptive occupancy prediction in individual rooms, which in turn allows for more granular and efficient control over resource consumption, leading to improved energy efficiency.
+\end{itemize}
+
+
+\section{Feasibility Study}
+\label{sec:feasibility_study}
+
+The viability of this project is supported by several existing advancements and foundational technologies:
+
+\begin{itemize}
+    \item \textbf{Proven Occupancy Prediction via Sensors:} The prediction of building occupancy using sensor data is a demonstrated capability.
+Existing datasets and prior research (e.g., Nasir et al., 2024) confirm that effective models can be trained and evaluated for this purpose \cite{khan2022occupancy}.
+    \item \textbf{Kafka-ML with Blockchain for Auditable Federated Learning:} The integration of Ethereum blockchain technology into the Kafka-ML framework has been shown to enable transparent and auditable tracking of participants and model updates within federated learning systems (e.g., Zhao et al., 2023) \cite{chaves2024federated}.
+    \item \textbf{Achievable Trustworthiness in Blockchain-Based AI:} Research (e.g., Abedi \& Jazizadeh, 2022) has presented blockchain architectures that can ensure accountability and promote fairness in federated learning \cite{lo2022toward,ali2023explainable}.
+This is often achieved through the use of smart contracts and techniques like weighted sampling.
+    \item \textbf{Customizable Kafka-ML Enables Fair and Secure Federated Learning:} Kafka-ML, being an open-source framework, offers the flexibility to be customized and extended.
+This adaptability is key to building a reliable federated learning environment that features improved transparency and traceability of processes.
+    \item \textbf{Integrated Approach Supports Fair and Secure Occupancy Prediction:} By combining sensor-based occupancy detection, the auditable nature of Kafka-ML enhanced with blockchain, and specific mechanisms for trustworthiness, it is feasible to develop a fair and secure room occupancy predictor.
+This predictor, utilizing real-time data, is expected to significantly enhance energy efficiency in smart buildings.
+\end{itemize}
+
+
+\section{Expected Outcome}
+\label{sec:expected_outcome}
+
+Upon successful completion, this project is anticipated to deliver the following key outcomes:
+
+\begin{itemize}
+    \item \textbf{Novel, Fair, and Secure Federated Learning System:} The primary outcome will be a fully functional federated learning framework specifically designed for smart building occupancy prediction.
+This system will ensure privacy-preserving asynchronous model training. Crucially, it will incorporate embedded fairness measures, transparent tracking of all model updates, and auditable records of contributions, leveraging blockchain technology to achieve these features.
+    \textbf{Enhanced Transparency and Accountability:} The integration of blockchain technology is expected to yield a verifiable and immutable record of the entire federated learning process.
+This enhanced transparency and accountability will foster trust among all participants by ensuring fairness in how contributions are handled and by maintaining the integrity of the global mode.
+    \item \textbf{Improved Occupancy Prediction Accuracy:} By training models on real-time data sourced from non-invasive environmental sensors (such as those measuring temperature, humidity, CO2 levels, and light), the project aims to achieve increased accuracy in room occupancy predictions.
+More accurate predictions will enable intelligent and responsive management of building resources, including HVAC (heating, ventilation, and air conditioning) and lighting systems, thereby contributing to more energy-efficient operations within smart buildings.
+\end{itemize}
