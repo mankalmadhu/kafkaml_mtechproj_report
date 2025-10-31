@@ -8,7 +8,8 @@ This chapter documents the key enhancements introduced during the project to ext
     \item \textbf{End-to-End Automation Layer:} A reusable orchestration framework that can provision Kafka-ML components, drive experiments, and capture artefacts without manual intervention.
     \item \textbf{Occupancy Dataset Integration:} Dataset-specific formatting, control messages, and configuration hooks that seamlessly plug the occupancy workload into the automation layer and federated services.
     \item \textbf{Dynamic Sampling for Federated Training:} Label-weight aware data injection and weighted loss handling in the federated training module to mitigate class imbalance and reward under-represented events.
-    \item \textbf{Advanced Aggregation and Streaming Improvements:} Enhancements to the aggregation logic (FedAvg\,+ with device registration and Krum-inspired filtering) and incremental chunk processing so that federated rounds operate on streaming sensor data.
+    \item \textbf{Advanced Aggregation Logic:} A FedAvg\,+ workflow that incorporates device registration and Krum-inspired filtering before promoting global models.
+    \item \textbf{Incremental Streaming Support:} Chunk-based scheduling and worker extensions that allow federated rounds to train on streaming sensor data without re-processing entire datasets.
 \end{itemize}
 
 Each subsequent section explains the design rationale, code-level changes, and interactions with existing Kafka-ML components for these additions. Execution setup, metrics, and outcome analysis are delegated to Chapters~6 and~7.
@@ -27,16 +28,22 @@ The end-to-end automation layer lives under the top-level `e2e\_scripts/` direct
         \textbf{Path} & \textbf{Responsibility} \\
         \midrule
         `automate\_e2e.py` & CLI entry point; parses YAML config, selects dataset handler, invokes `PipelineRunner`. \\
-        `automate\_mnist_federated_e2e.py` & Legacy scenario script retained for compatibility; shares helpers with the generic runner. \\
-        `check_kafka_topic.py` & Utility for validating Kafka topic offsets and payloads during automation runs. \\
         `configs/` & YAML definitions describing datasets, deployment knobs, aggregation parameters, and optional step skips. \\
         `datasets/` & Dataset adapters (e.g., MNIST, occupancy) that expose common hooks for preparation and inference validation. \\
         `lib/` & Shared helpers for Kubernetes operations, Kafka interactions, blockchain contract clients, and the `PipelineRunner` implementation. \\
-        `automation_results.json`, `automation_*.log` & Structured results and timestamped logs emitted after each run. \\
-        `requirements_automation.txt` & Python dependencies required to execute the automation pipeline. \\
+        `automation_*.log` & Timestamped logs emitted after each run, complementing structured JSON summaries consumed in later chapters. \\
     \bottomrule
     \end{tabular}
 \end{table}
 
 This modular layout keeps orchestration logic decoupled from workload specifics, allowing subsequent enhancements (Sections~\ref{sec:occupancy_integration}--\ref{sec:incremental_federated}) to extend the pipeline without duplicating setup boilerplate.
+
+\section{Occupancy Dataset Integration}
+\label{sec:occupancy_integration}
+
+To support smart-building experiments, the automation layer introduces a dedicated occupancy dataset adapter that mirrors the classic MNIST handler but is tuned for multivariate sensor streams. The `OccupancyDataset` class derives from the common dataset base and provides three capabilities: (i) deterministic loading of the raw CSV files (training, validation, inference) with caching to avoid repeated disk reads; (ii) feature scaling via `StandardScaler`, which preserves the relative dynamics of temperature, humidity, light, CO$_2$, and humidity ratio while feeding normalised tensors into TensorFlow jobs; and (iii) convenience helpers for downstream features, such as class-distribution inspection and inverse-frequency weight calculation used by dynamic sampling. By exposing a uniform interface (`load_training_data`, `load_test_data`, `load_inference_data`, `parse_prediction`), the adapter plugs seamlessly into the generic `PipelineRunner` regardless of whether a single-worker or multi-device scenario is being executed.
+
+Within `PipelineRunner`, the data-injection stage exploits the dataset adapter to retrieve preprocessed tensors and then streams them into Kafka using `FederatedRawSink`. For single-device runs, `_inject_training_data_single_device` reads the configured training and test sample counts, ensures the target topics exist via `KafkaAdmin`, and sequentially invokes `FederatedRawSink.send()` for each record. For multi-device runs, `_inject_training_data_multi_device` iterates over the set of registered devices, loads the per-device files declared in the YAML configuration (including optional ``faulty'' datasets), and attaches device-specific label weights when dynamic sampling is enabled. After the payloads are published, the sink emits a control message whose `topic` field encodes the Kafka partition and offset range where the dataset resides; the federated backend consumes this control envelope to detect collisions and schedule worker jobs.
+
+The sink layer itself has been extended to support these richer workloads. `FederatedRawSink` now accepts optional `label_weights` and `streaming_data_chunks` arguments and inherits enhanced bookkeeping from `KafkaMLSink`. Each successful publish appends metadata so the control message can include accurate offsets, message counts, and any streaming chunk configuration. This guarantees that federated controllers receive both the data-control signal and the precise location of the sensor samples needed for training, while higher-level automation records (e.g., device statistics, sample totals) are written back to the automation logs for later analysis in Chapter~6.
 
