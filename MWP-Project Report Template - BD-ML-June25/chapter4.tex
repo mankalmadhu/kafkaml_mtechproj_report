@@ -64,6 +64,25 @@ Federated deployments reuse the classic Kafka-ML services (frontend, backend API
 
 These stages deliver a repeatable pipeline: the classic services continue to manage user workflows, while the additional loggers, backend hooks, and Kubernetes jobs orchestrate federated training across Kafka topics dedicated to model artefacts, control signals, and data streams.
 
+\subsection{Federated Learning with Blockchain Integration}
+\label{subsec:federated_blockchain}
+
+When blockchain support is enabled, the same federated orchestration pipeline gains an immutable audit trail and automated incentives. The control/data choreography remains unchanged, but additional steps bind every critical message to a smart contract and wallet maintained for that deployment.
+
+\begin{enumerate}
+    \item \textbf{Backend wallet initialisation:} During deployment the backend provisions (or links) a dedicated wallet that tracks balance and outbound rewards for the federated job. The wallet address and contract identifiers are stored alongside the model configuration so every component can reference them.
+
+    \item \textbf{Control message notarisation:} After the model training service emits the federated model control message to Kafka, it also writes the same payload (hash plus metadata) to the blockchain contract. This establishes a tamper-evident record that downstream consumers can verify before accepting the round.
+
+    \item \textbf{On-chain logging of client updates:} Each federated worker, once local training finishes, pushes its contribution metadata to the blockchain contract in parallel with the aggregation control topic. The contract stores the association between client wallet, round identifier, and performance metrics.
+
+    \item \textbf{Aggregated model attestation:} The aggregation service consumes the client control messages as usual, fetches the updated weights, and publishes the new global model. In addition, it records the aggregation outcome on-chain (including the Kafka topic that holds the refreshed weights) so the blockchain ledger mirrors the state of the global model.
+
+    \item \textbf{Reward calculation and settlement:} Using the metrics submitted by the workers, the aggregation service (or a dedicated reward handler) computes contribution deltas against the previous round—considering loss reduction, accuracy gains, and other configured KPIs. The resulting token or credit transfer is executed via the federated deployment’s wallet, issuing payments to client accounts and logging the transaction hash back into the backend for reporting.
+\end{enumerate}
+
+This extension preserves the privacy benefits of Kafka-ML’s federated mode while adding non-repudiation, transparent contribution history, and automated incentive distribution managed through the blockchain contract.
+
 \section{KafkaML Setup}
 
 
