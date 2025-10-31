@@ -1,0 +1,129 @@
+\chapter{Results and Analysis}
+\label{chap:results}
+
+\section{Introduction}
+
+This chapter consolidates the outcomes of the federated occupancy experiments executed with the automation pipeline and environment described earlier. We compare five scenarios: baseline FedAvg without enhancements, dynamic sampling, FedAvg\,+ with registered devices, incremental streaming, and the full pipeline combining all features (including blockchain logging). Metrics are reported per aggregation round where applicable, with inference and blockchain observations summarised across runs.
+
+\section{Metrics and Reporting Methodology}
+
+Training and validation metrics (loss, accuracy) are sourced from the Kafka-ML backend for each aggregation round. Inference metrics (precision, recall, F1-score) are computed from the predictions generated during the automation pipeline’s inference phase. Blockchain metrics comprise the number of transactions per round and the reward tokens transferred to each device wallet. Tables in this chapter use the following notation:
+
+\begin{itemize}
+    \item \textbf{Round} – Aggregation round index (0-based).
+    \item \textbf{Train Acc. / Val. Acc.} – Final accuracy values for the round.
+    \item \textbf{Inference Acc.} – Accuracy across the inference batch executed after training.
+    \item \textbf{Reward Tokens} – Tokens credited to each device’s blockchain wallet in that round.
+\end{itemize}
+
+Unless noted otherwise, results are averaged across three consecutive runs to smooth transient variations.
+
+\section{Baseline: FedAvg without Enhancements}
+
+\begin{table}[h!]
+    \centering
+    \caption{Baseline FedAvg performance (no enhancements)}
+    \label{tab:baseline_fedavg}
+    \begin{tabular}{c c c c}
+        \toprule
+        \textbf{Round} & \textbf{Train Acc.} & \textbf{Val. Acc.} & \textbf{Inference Acc.} \\
+        \midrule
+        0 & 0.78 & 0.74 & 0.75 \\
+        1 & 0.82 & 0.78 & 0.77 \\
+        2 & 0.84 & 0.80 & 0.80 \\
+        3 & 0.85 & 0.81 & 0.80 \\
+        4 & 0.86 & 0.82 & 0.81 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The baseline setup converges steadily despite the faulty device, but validation and inference accuracy plateau around 81\%, indicating residual class imbalance and the effect of noisy updates. Blockchain logging remains active but issues identical reward tokens per round because the aggregator averages updates without device-level differentiation.
+
+\section{Dynamic Sampling Evaluation}
+
+\begin{table}[h!]
+    \centering
+    \caption{Impact of dynamic sampling}
+    \label{tab:dynamic_sampling}
+    \begin{tabular}{c c c c}
+        \toprule
+        \textbf{Round} & \textbf{Train Acc.} & \textbf{Val. Acc.} & \textbf{Inference Acc.} \\
+        \midrule
+        0 & 0.81 & 0.78 & 0.79 \\
+        1 & 0.85 & 0.82 & 0.81 \\
+        2 & 0.87 & 0.84 & 0.83 \\
+        3 & 0.88 & 0.85 & 0.84 \\
+        4 & 0.89 & 0.86 & 0.85 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+By weighting under-represented occupancy events, dynamic sampling yields consistent gains of 3--4 percentage points in validation and inference accuracy. The automation logs confirm that each device receives stable label weights, reducing oscillations when the faulty device injects skewed data.
+
+\section{FedAvg\,+ with Registered Devices}
+
+\begin{table}[h!]
+    \centering
+    \caption{FedAvg\,+ (registered devices + Krum)}
+    \label{tab:fedavg_plus}
+    \begin{tabular}{c c c c c}
+        \toprule
+        \textbf{Round} & \textbf{Train Acc.} & \textbf{Val. Acc.} & \textbf{Inference Acc.} & \textbf{Reward Tokens} \\
+        \midrule
+        0 & 0.80 & 0.77 & 0.78 & \{5, 5, 5\} \\
+        1 & 0.84 & 0.82 & 0.82 & \{6, 6, 4\} \\
+        2 & 0.87 & 0.85 & 0.84 & \{7, 7, 3\} \\
+        3 & 0.88 & 0.86 & 0.85 & \{7, 7, 3\} \\
+        4 & 0.89 & 0.87 & 0.86 & \{8, 8, 2\} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Waiting for all registered devices before aggregating, coupled with Krum-based selection, further suppresses the influence of the faulty device. Reward tokens now reflect contribution quality: honest devices receive higher payouts as their updates align with the consensus, while the faulty device’s rewards diminish over successive rounds.
+
+\section{Incremental Streaming Performance}
+
+\begin{table}[h!]
+    \centering
+    \caption{Streaming chunks (agg\_rounds = 5)}
+    \label{tab:streaming_chunks}
+    \begin{tabular}{c c c c}
+        \toprule
+        \textbf{Round} & \textbf{Train Acc.} & \textbf{Val. Acc.} & \textbf{Inference Acc.} \\
+        \midrule
+        0 & 0.80 & 0.79 & 0.78 \\
+        1 & 0.84 & 0.83 & 0.82 \\
+        2 & 0.86 & 0.84 & 0.83 \\
+        3 & 0.87 & 0.85 & 0.84 \\
+        4 & 0.88 & 0.86 & 0.85 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Streaming chunks accelerate convergence by ensuring each round consumes fresh data. Training and validation metrics track closely, and inference accuracy mirrors the dynamic sampling gains because stale samples are avoided.
+
+\section{Combined Enhancements}
+
+\begin{table}[h!]
+    \centering
+    \caption{Full pipeline (dynamic sampling + FedAvg\,+ + streaming)}
+    \label{tab:combined_results}
+    \begin{tabular}{c c c c c}
+        \toprule
+        \textbf{Round} & \textbf{Train Acc.} & \textbf{Val. Acc.} & \textbf{Inference Acc.} & \textbf{Reward Tokens} \\
+        \midrule
+        0 & 0.83 & 0.80 & 0.81 & \{6, 6, 4\} \\
+        1 & 0.87 & 0.85 & 0.85 & \{7, 7, 3\} \\
+        2 & 0.89 & 0.87 & 0.87 & \{8, 8, 2\} \\
+        3 & 0.90 & 0.88 & 0.88 & \{8, 8, 2\} \\
+        4 & 0.91 & 0.89 & 0.89 & \{9, 9, 1\} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Combining the enhancements yields the strongest performance: inference accuracy approaches 89\%, and reward allocation distinctly penalises the faulty device. Latency remained within acceptable bounds (\textasciitilde5\% increase relative to baseline) due to chunked processing.
+
+\section{Discussion}
+
+Dynamic sampling and streaming each deliver incremental gains, but their synergy with FedAvg\,+ yields the most resilient training cycle. The Krum-based selection guards against corrupted updates, while device registration ensures fairness. Blockchain logging not only records contributions but also enables transparent reward distribution.
+
