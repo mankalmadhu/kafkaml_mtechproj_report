@@ -35,15 +35,19 @@ The automation layer loads these files through \texttt{OccupancyDataset}, normal
 \section{Per-Device Deployment Layout}
 \label{sec:deployment_layout}
 
-Device-specific Kubernetes overlays reside under \texttt{federated-module/kustomize/dev1}, \texttt{dev2}, and \texttt{dev3}. Each overlay wires the following components to a unique namespace:
+Device-specific Kubernetes overlays reside under \texttt{federated-module/kustomize/dev1}, \texttt{dev2}, and \texttt{dev3}. Each overlay targets its own Kubernetes namespace (for example, \texttt{kafkamldevice1}, \texttt{kafkamldevice2}, and \texttt{kafkamldevice3}), ensuring that controller jobs, workers, and supporting services remain isolated. Within each namespace, the overlay provisions:
 
 \begin{itemize}
     \item federated backend and control loggers pointed at device-specific topics;
     \item controller and worker jobs that honour the registered device ID and associated control topics;
-    \item optional blockchain helpers (smart-contract client, wallet secrets) when blockchain mode is enabled.
+    \item blockchain helpers (smart-contract client and device-specific wallet secrets) when blockchain mode is enabled, allowing the controller to issue rewards directly to each registered device’s account.
 \end{itemize}
 
-Although all devices share the same Kafka cluster and backend API, these overlays emulate geographically separated edges by isolating namespaces and control channels. The registered-device count derived from the YAML ensures the aggregation layer waits for all three deployments during each round.
+Although all devices share the same Kafka cluster and backend API, these namespace-bound overlays emulate geographically separated edges by isolating components, control channels, and blockchain accounts. The registered-device count derived from the YAML ensures the aggregation layer waits for all three deployments during each round before issuing on-chain rewards.
+
+\section{Execution Runbook}
+\label{sec:execution_runbook}
+
 
 \section{Execution Runbook}
 \label{sec:execution_runbook}
@@ -54,7 +58,7 @@ Experiments are launched with:
 python automate_e2e.py --config configs/occupancy_federated_3device_faulty.yaml
 \end{verbatim}
 
-No skip flags were used in the baseline runs; automation logs (`automation_*.log`) and structured summaries (`automation_results.json`) were archived for analysis. Prior to executing the script, the Kafka-ML core and federated modules were deployed via:
+No skip flags were used in the baseline runs; automation logs (\texttt{automation\_*.log}) and structured summaries (\texttt{automation\_results.json}) were archived for analysis. Prior to executing the script, the Kafka-ML core and federated modules were deployed via:
 
 \begin{verbatim}
 kubectl apply -k kustomize/local
