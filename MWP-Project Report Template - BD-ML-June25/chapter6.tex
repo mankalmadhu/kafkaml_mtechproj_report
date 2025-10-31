@@ -1,0 +1,68 @@
+\chapter{Experiment Environment}
+
+\section{Overview}
+
+This chapter documents the environment used to generate the results in Chapter~\ref{chap:results}. Every experiment was orchestrated through the automation pipeline described previously, but reproducibility hinges on the concrete configuration, dataset partitions, and deployment overlays captured here. The objective is to provide a precise runbook so that reviewers can recreate the three-device occupancy scenario (including a deliberately faulty client) on demand.
+
+\section{Scenario Configuration}
+\label{sec:scenario_config}
+
+The entry point for the experiments is the YAML file `configs/occupancy_federated_3device_faulty.yaml`. Its key sections are summarised below:
+
+\begin{itemize}
+    \item \textbf{Model}: defines a TensorFlow binary-classification network with three dense layers and dropout, compiled with Adam and weighted metrics.
+    \item \textbf{Configuration}: binds the model to the federated training workflow and provides descriptive metadata for traceability.
+    \item \textbf{Deployment}: enables federated training with blockchain logging, sets five aggregation rounds, specifies the FedAvg aggregation strategy (extended to FedAvg\,+ when configured), and declares minimum sample requirements per round.
+    \item \textbf{Data Injection}: lists common Kafka parameters, toggles streaming chunk support, and outlines device-specific topics, control channels, and dataset files (including one faulty source).
+    \item \textbf{Inference}: configures the inference deployment, including the RAW input format, Kafka topics, and the number of predictions captured after each run.
+\end{itemize}
+
+Together these sections fully describe the payloads passed to `automate_e2e.py` when launching experiments.
+
+\section{Dataset Partitioning and Fault Injection}
+\label{sec:dataset_partitioning}
+
+Each federated device consumes a dedicated dataset stored under `datasets/`:
+
+\begin{itemize}
+    \item `device1_data.txt` and `device2_data.txt` contain clean occupancy readings drawn from the canonical training set, providing approximately 3{,}000 samples per device after preprocessing.
+    \item `datatraining_faulty.txt` injects corrupted or biased readings to emulate a misbehaving edge node; the automation script flags this device via `faulty_device: true` in the YAML.
+\end{itemize}
+
+The automation layer loads these files through \texttt{OccupancyDataset}, normalises the features, and (optionally) computes per-device label weights. Validation rates (20\%) are applied consistently so the backend can split training and validation subsets deterministically. The faulty device is crucial for evaluating robustness of dynamic sampling and FedAvg\,+ in Chapter~\ref{sec:fedavg_plus_eval}.
+
+\section{Per-Device Deployment Layout}
+\label{sec:deployment_layout}
+
+Device-specific Kubernetes overlays reside under `federated-module/kustomize/dev1`, `dev2`, and `dev3`. Each overlay wires the following components to a unique namespace:
+
+\begin{itemize}
+    \item federated backend and control loggers pointed at device-specific topics;
+    \item controller and worker jobs that honour the registered device ID and associated control topics;
+    \item optional blockchain helpers (smart-contract client, wallet secrets) when blockchain mode is enabled.
+\end{itemize}
+
+Although all devices share the same Kafka cluster and backend API, these overlays emulate geographically separated edges by isolating namespaces and control channels. The registered-device count derived from the YAML ensures the aggregation layer waits for all three deployments during each round.
+
+\section{Execution Runbook}
+\label{sec:execution_runbook}
+
+Experiments are launched with:
+
+\begin{verbatim}
+python automate_e2e.py --config configs/occupancy_federated_3device_faulty.yaml
+\end{verbatim}
+
+No skip flags were used in the baseline runs; automation logs (`automation_*.log`) and structured summaries (`automation_results.json`) were archived for analysis. Prior to executing the script, the Kafka-ML core and federated modules were deployed via:
+
+\begin{verbatim}
+kubectl apply -k kustomize/local
+kubectl apply -k federated-module/kustomize/local
+\end{verbatim}
+
+The automation pipeline performed model/config/deployment creation, data injection, training monitoring, inference, and summary generation without manual intervention. All runs were executed on a local Kubernetes cluster (Minikube) with Kafka brokers accessible at `localhost:9094` and the backend API at `http://localhost:9090`.
+
+\section{Summary}
+
+This environment chapter captures the exact configuration, datasets, and deployment overlays underpinning the experiments. With these artefacts and commands, the results in Chapter~\ref{chap:results} can be replicated or extended with alternative aggregation strategies, dataset splits, or device counts.
+
