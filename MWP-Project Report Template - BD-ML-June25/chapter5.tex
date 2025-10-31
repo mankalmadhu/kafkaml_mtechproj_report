@@ -19,6 +19,17 @@ Each subsequent section explains the design rationale, code-level changes, and i
 
 The end-to-end automation layer lives under the top-level `e2e\_scripts/` directory. At its core is `automate\_e2e.py`, a command-line entry point that loads a YAML scenario, instantiates the matching dataset handler, and hands execution to `PipelineRunner`. The runner drives a deterministic sequence of phases—environment preparation, Kubernetes deployment, backend submissions, controller triggers, data injection, and artefact capture—so complete Kafka-ML experiments can be executed repeatably with a single command.
 
+\noindent The pipeline follows seven repeatable steps:
+\begin{enumerate}
+    \item \textbf{Create Model} – Upload the TensorFlow architecture and metadata to the backend.
+    \item \textbf{Create Configuration} – Bind training parameters, aggregation strategy, and dataset settings to the model.
+    \item \textbf{Create Deployment} – Launch the Kubernetes jobs (classic or federated) and generate a deployment ID plus federated string.
+    \item \textbf{Inject Data} – Publish preprocessed samples (and control metadata) to Kafka topics via `FederatedRawSink`; handles single vs.~multi-device paths, optional dynamic sampling weights, and incremental streaming chunks.
+    \item \textbf{Monitor Training} – Poll the backend until the training job reports completion and collect intermediate metrics.
+    \item \textbf{Create Inference Engine} – Spin up an inference deployment wired to the trained model and inference topics.
+    \item \textbf{Run Inference} – Stream test samples through Kafka and log predictions for downstream analysis.
+\end{enumerate}
+
 \begin{table}[h!]
     \centering
     \caption{Key components in `e2e\_scripts/`}
