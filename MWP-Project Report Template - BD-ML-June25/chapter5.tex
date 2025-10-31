@@ -55,3 +55,10 @@ During data injection, \texttt{PipelineRunner} retrieves the preprocessed tensor
 
 The sink layer was extended to make this workflow reliable. \texttt{FederatedRawSink} now accepts optional \texttt{label\_weights} and \texttt{streaming\_data\_chunks} parameters and inherits improved bookkeeping from \texttt{KafkaMLSink}. Each publish stores record metadata so the control message accurately reports offsets, message counts, and streaming chunk settings. Consequently, federated controllers receive both the data-control envelope and the precise coordinates of the sensor samples, while automation logs continue to track per-device statistics that feed into the evaluation presented in Chapter~6.
 
+\section{Dynamic Sampling for Federated Training}
+\label{sec:dynamic_sampling}
+
+To address class imbalance in occupancy data (where ``vacant'' readings dominate during off hours), the automation pipeline computes device-specific label weights and passes them through to the federated training service. During multi-device data injection, \texttt{PipelineRunner} inspects each device’s labels by calling \texttt{dataset.compute\_label\_weights\_from\_data()}. The helper returns inverse-frequency weights which the runner stores alongside the per-device configuration. These weights are serialised into the data-control message so downstream components can rehydrate them when the worker job starts.
+
+On the training side, \texttt{federated\_mainTraining.py} consumes the label-weight metadata and conditionally applies dynamic sampling. When \texttt{LABEL\_WEIGHTS} is present in the environment, the dataset maps are wrapped with \texttt{assign\_sample\_weight()}, ensuring each mini-batch carries a third element (features, label, weight). TensorFlow’s training loop then incorporates these weights when computing gradients, so under-represented occupancy events receive proportionally higher influence during model updates. The same weighting is applied to validation splits, keeping evaluation metrics consistent with the sampling regime.
+
