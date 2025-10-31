@@ -73,3 +73,12 @@ To address class imbalance in occupancy data (where ``vacant'' readings dominate
 
 On the training side, \texttt{federated\_mainTraining.py} consumes the label-weight metadata and conditionally applies dynamic sampling. When \texttt{LABEL\_WEIGHTS} is present in the environment, the dataset maps are wrapped with \texttt{assign\_sample\_weight()}, ensuring each mini-batch carries a third element (features, label, weight). TensorFlow’s training loop then incorporates these weights when computing gradients, so under-represented occupancy events receive proportionally higher influence during model updates. The same weighting is applied to validation splits, keeping evaluation metrics consistent with the sampling regime.
 
+\section{FedAvg\,+ with Registered Devices}
+\label{sec:fedavg_plus}
+
+To strengthen robustness against stragglers or unreliable updates, the automation framework now registers devices explicitly during the deployment phase. \texttt{PipelineRunner} counts the number of devices declared in the data-injection configuration and passes that figure as the \texttt{registered\_devices} argument when invoking the backend’s deployment API. This count flows through Kafka-ML and informs the aggregation service how many client models must arrive before a round can be finalised.
+
+The edge aggregation logic, implemented in \texttt{edgeBlockchainBasedTraining.py}, enforces this contract. Before aggregating, the training loop verifies that the number of collected client models matches \texttt{registered\_devices}; if not, it waits while logging progress (lines~195--205). Once the threshold is met (lines~207--211), the service proceeds with aggregation and resets its queue for the next round. This behaviour guarantees that every registered participant contributes to each FedAvg\,+ iteration, preventing partial updates from influencing the global model.
+
+Aggregation is delegated to the new \texttt{aggregation\_strategies.py} module. Alongside standard FedAvg, the module introduces \texttt{KrumStrategy}, which selects the model closest to the consensus of all submissions, and \texttt{FedAvgPlusStrategy}, which currently wraps Krum but can be extended with weighted averaging. By choosing FedAvg\,+ in the deployment configuration, the automation pipeline switches the controller to the Krum-based selection logic after all devices report, combining strict device coordination with outlier-resistant aggregation.
+
