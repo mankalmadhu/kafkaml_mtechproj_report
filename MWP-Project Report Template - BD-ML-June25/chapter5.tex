@@ -1,0 +1,15 @@
+\chapter{Platform Enhancements}
+
+\section{Overview}
+
+This chapter documents the key enhancements introduced during the project to extend Kafka-ML beyond the baseline described in Chapter~\ref{chap:results_analyses}. The work focused on strengthening the automation, fairness, and robustness of the federated learning pipeline that powers smart building occupancy prediction. The contributions are organised into four thematic areas:
+
+\begin{itemize}
+    \item \textbf{End-to-End Automation Layer:} A reusable orchestration framework (`e2e\_scripts/`) that can provision Kafka-ML components, drive experiments, and capture artefacts without manual intervention.
+    \item \textbf{Occupancy Dataset Integration:} Dataset-specific formatting, control messages, and configuration hooks that seamlessly plug the occupancy workload into the automation layer and federated services.
+    \item \textbf{Dynamic Sampling for Federated Training:} Label-weight aware data injection and weighted loss handling in the federated training module to mitigate class imbalance and reward under-represented events.
+    \item \textbf{Advanced Aggregation and Streaming Improvements:} Enhancements to the aggregation logic (FedAvg\,+ with device registration and Krum-inspired filtering) and incremental chunk processing so that federated rounds operate on streaming sensor data.
+\end{itemize}
+
+Each subsequent section explains the design rationale, code-level changes, and interactions with existing Kafka-ML components for these additions. Execution setup, metrics, and outcome analysis are deliberately deferred to Chapters~6 and~7.
+
