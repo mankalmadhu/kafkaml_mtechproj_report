@@ -82,3 +82,10 @@ The edge aggregation logic, implemented in \texttt{edgeBlockchainBasedTraining.p
 
 Aggregation is delegated to the new \texttt{aggregation\_strategies.py} module. Alongside standard FedAvg, the module introduces \texttt{KrumStrategy}, which selects the model closest to the consensus of all submissions, and \texttt{FedAvgPlusStrategy}, which currently wraps Krum but can be extended with weighted averaging. By choosing FedAvg\,+ in the deployment configuration, the automation pipeline switches the controller to the Krum-based selection logic after all devices report, combining strict device coordination with outlier-resistant aggregation.
 
+\section{Incremental Federated Learning for Streaming Data}
+\label{sec:incremental_federated}
+
+To better mimic continuous sensor feeds, the automation pipeline can now split data into streaming chunks so that each aggregation round trains on fresh samples. In the data-injection phase, \texttt{PipelineRunner} inspects the configuration for \texttt{streaming\_data\_chunks}. When present, it derives the number of chunks from the deployment’s aggregation rounds and passes the chunk count to \texttt{FederatedRawSink}. The sink embeds this value in the control message alongside topic offsets, signalling to workers that the dataset should be consumed incrementally.
+
+The worker logic in \texttt{federated\_mainTraining.py} interprets the chunk metadata before loading data from Kafka. For each round, it computes a begin and end offset based on the total number of samples and the configured chunk count, logs the calculated range, and then uses \texttt{tf.io.IODataset.from\_kafka} to fetch only that window. As a result, round~$n$ trains on disjoint offsets from round~$n-1$, ensuring that aggregated updates incorporate new sensor readings rather than replaying the full dataset each time. This offset management also keeps validation splits aligned with the chunked schedule, enabling a true streaming-style federated loop without additional manual coordination.
+
