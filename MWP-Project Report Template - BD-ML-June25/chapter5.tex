@@ -16,7 +16,27 @@ Each subsequent section explains the design rationale, code-level changes, and i
 \section{End-to-End Automation Layer}
 \label{sec:automation_layer}
 
-The automation framework centres on `automate\_e2e.py`, which provides a single entry point for orchestrating complete Kafka-ML experiments. The script loads a YAML configuration, instantiates the appropriate dataset handler (currently MNIST or occupancy), and then delegates execution to `PipelineRunner` in `lib/pipeline_runner.py`. The runner interprets the configuration to perform a deterministic sequence of phases: verifying or building container artefacts, applying Kustomize overlays for Kafka-ML and federated services, submitting model/configuration/deployment objects through the backend API, triggering federated controllers, driving data injection, and capturing logs plus summary artefacts (`automation_*.log`, `automation_results.json`).
+The end-to-end automation layer lives under the top-level `e2e\_scripts/` directory. At its core is `automate\_e2e.py`, a command-line entry point that loads a YAML scenario, instantiates the matching dataset handler, and hands execution to `PipelineRunner`. The runner drives a deterministic sequence of phases—environment preparation, Kubernetes deployment, backend submissions, controller triggers, data injection, and artefact capture—so complete Kafka-ML experiments can be executed repeatably with a single command.
 
-The `configs/` directory contains scenario definitions that separate automation logic from workload specifics; command-line flags (e.g., `--skip`, `--pause`) allow operators to bypass stages or step through them interactively. Dataset modules under `datasets/` encapsulate data preparation and inference test hooks so new workloads can be dropped into the same pipeline without touching orchestration code, while helpers in `lib/` (Kafka topic utilities, Kubernetes orchestration, blockchain interactions) keep environment control reusable across scenarios. This modular structure enables the subsequent enhancements (Sections~\ref{sec:occupancy_integration}--\ref{sec:incremental_federated}) to plug into the same automation backbone without duplicating setup boilerplate.
+\begin{table}[h!]
+    \centering
+    \caption{Key components in `e2e\_scripts/`}
+    \label{tab:e2e_components}
+    \begin{tabular}{p{0.28\textwidth} p{0.62\textwidth}}
+        \toprule
+        \textbf{Path} & \textbf{Responsibility} \\
+        \midrule
+        `automate\_e2e.py` & CLI entry point; parses YAML config, selects dataset handler, invokes `PipelineRunner`. \\
+        `automate\_mnist_federated_e2e.py` & Legacy scenario script retained for compatibility; shares helpers with the generic runner. \\
+        `check_kafka_topic.py` & Utility for validating Kafka topic offsets and payloads during automation runs. \\
+        `configs/` & YAML definitions describing datasets, deployment knobs, aggregation parameters, and optional step skips. \\
+        `datasets/` & Dataset adapters (e.g., MNIST, occupancy) that expose common hooks for preparation and inference validation. \\
+        `lib/` & Shared helpers for Kubernetes operations, Kafka interactions, blockchain contract clients, and the `PipelineRunner` implementation. \\
+        `automation_results.json`, `automation_*.log` & Structured results and timestamped logs emitted after each run. \\
+        `requirements_automation.txt` & Python dependencies required to execute the automation pipeline. \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+This modular layout keeps orchestration logic decoupled from workload specifics, allowing subsequent enhancements (Sections~\ref{sec:occupancy_integration}--\ref{sec:incremental_federated}) to extend the pipeline without duplicating setup boilerplate.
 
