@@ -62,7 +62,9 @@ No skip flags were used in the baseline runs; automation logs (\texttt{automatio
 
 \begin{verbatim}
 kubectl apply -k kustomize/local
-kubectl apply -k federated-module/kustomize/local
+kubectl apply -k federated-module/kustomize/dev1
+kubectl apply -k federated-module/kustomize/dev2
+kubectl apply -k federated-module/kustomize/dev3
 \end{verbatim}
 
 The automation pipeline performed model/config/deployment creation, data injection, training monitoring, inference, and summary generation without manual intervention. All runs were executed on a local Kubernetes cluster (Minikube) with Kafka brokers accessible at `localhost:9094` and the backend API at `http://localhost:9090`.
