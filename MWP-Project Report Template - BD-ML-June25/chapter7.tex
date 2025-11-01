@@ -118,21 +118,15 @@ Dynamic sampling improves validation and inference accuracy by roughly four perc
         \toprule
         \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & Device 1 & 3000 & 0.81 & 0.40 & 0.78 & 0.44 & 5 \\
-        0 & Device 2 & 3000 & 0.80 & 0.41 & 0.77 & 0.45 & 5 \\
-        0 & Device 3 (faulty) & 3000 & 0.74 & 0.49 & 0.72 & 0.52 & 5 \\
-        1 & Device 1 & 3000 & 0.85 & 0.36 & 0.82 & 0.40 & 6 \\
-        1 & Device 2 & 3000 & 0.84 & 0.37 & 0.81 & 0.41 & 6 \\
-        1 & Device 3 (faulty) & 3000 & 0.77 & 0.47 & 0.74 & 0.50 & 4 \\
-        2 & Device 1 & 3000 & 0.88 & 0.33 & 0.85 & 0.37 & 7 \\
-        2 & Device 2 & 3000 & 0.87 & 0.34 & 0.84 & 0.38 & 7 \\
-        2 & Device 3 (faulty) & 3000 & 0.79 & 0.44 & 0.76 & 0.48 & 3 \\
-        3 & Device 1 & 3000 & 0.89 & 0.31 & 0.86 & 0.36 & 7 \\
-        3 & Device 2 & 3000 & 0.88 & 0.32 & 0.85 & 0.37 & 7 \\
-        3 & Device 3 (faulty) & 3000 & 0.80 & 0.43 & 0.77 & 0.47 & 3 \\
-        4 & Device 1 & 3000 & 0.90 & 0.29 & 0.87 & 0.34 & 8 \\
-        4 & Device 2 & 3000 & 0.89 & 0.30 & 0.86 & 0.35 & 8 \\
-        4 & Device 3 (faulty) & 3000 & 0.81 & 0.41 & 0.78 & 0.46 & 2 \\
+        0 & Device 2 & 8144 & 0.9853 & 0.0546 & 0.9902 & 0.0425 & 100.00 \\
+        0 & Device 1 & 12216 & 0.9887 & 0.0463 & 0.9881 & 0.0387 & 60.00 \\
+        0 & Device 3 (faulty) & 8142 & 0.8001 & 0.5063 & 0.7993 & 0.5058 & 28.57 \\
+        1 & Device 2 & 8144 & 0.9851 & 0.0562 & 0.9902 & 0.0433 & 28.57 \\
+        1 & Device 3 (faulty) & 8142 & 0.8001 & 0.5049 & 0.7993 & 0.5069 & 9.52 \\
+        1 & Device 1 & 12216 & 0.9884 & 0.0491 & 0.9881 & 0.0399 & 42.86 \\
+        2 & Device 2 & 8144 & 0.9876 & 0.0511 & 0.9902 & 0.0409 & 9.52 \\
+        2 & Device 3 (faulty) & 8142 & 0.7995 & 0.5094 & 0.7993 & 0.5192 & 0.00 \\
+        2 & Device 1 & 12216 & 0.9889 & 0.0442 & 0.9885 & 0.0374 & 21.43 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -145,13 +139,12 @@ Dynamic sampling improves validation and inference accuracy by roughly four perc
         \toprule
         \textbf{Inference Samples} & \textbf{Accuracy} \\
         \midrule
-        20 & 0.86 \\
+        30 & 1.00 \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{table>
 
-Waiting for all registered devices before aggregating, coupled with Krum-based selection, reduces the faulty device’s influence. Rewards now reflect contribution quality: honest devices receive higher tokens as their updates align with the consensus, while the faulty device’s rewards diminish over successive rounds.
-Waiting for all registered devices before aggregating, coupled with Krum-based selection, further suppresses the influence of the faulty device. Reward tokens now reflect contribution quality: honest devices receive higher payouts as their updates align with the consensus, while the faulty device’s rewards diminish over successive rounds.
+Waiting for all registered devices before aggregating, coupled with Krum-based selection, further suppresses the influence of the faulty device. Reward tokens now reflect contribution quality: honest devices receive higher payouts as their updates align with the consensus, while the faulty device's rewards diminish over successive rounds.
 
 \section{Incremental Streaming Performance}
 
