@@ -26,16 +26,25 @@ Unless noted otherwise, results are averaged across three consecutive runs to sm
     \centering
     \caption{Baseline FedAvg training metrics (registered devices)}
     \label{tab:baseline_fedavg}
-    \begin{tabular}{c|ccc|ccc|ccc}
+    \begin{tabular}{c c c c c c c c}
         \toprule
-        \multirow{2}{*}{\textbf{Round}} & \multicolumn{3}{c|}{\textbf{Device 1}} & \multicolumn{3}{c|}{\textbf{Device 2}} & \multicolumn{3}{c}{\textbf{Device 3 (faulty)}} \\
-        & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward \\
+        \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & 3000 & 0.80 / 0.45 (val 0.76 / 0.48) & 5 & 3000 & 0.79 / 0.46 (val 0.75 / 0.49) & 5 & 3000 & 0.72 / 0.55 (val 0.70 / 0.57) & 5 \\
-        1 & 3000 & 0.83 / 0.42 (val 0.78 / 0.46) & 5 & 3000 & 0.82 / 0.43 (val 0.77 / 0.47) & 5 & 3000 & 0.74 / 0.53 (val 0.71 / 0.55) & 5 \\
-        2 & 3000 & 0.85 / 0.39 (val 0.80 / 0.44) & 5 & 3000 & 0.84 / 0.40 (val 0.79 / 0.45) & 5 & 3000 & 0.76 / 0.51 (val 0.73 / 0.53) & 5 \\
-        3 & 3000 & 0.86 / 0.37 (val 0.81 / 0.42) & 5 & 3000 & 0.85 / 0.38 (val 0.80 / 0.43) & 5 & 3000 & 0.77 / 0.50 (val 0.74 / 0.52) & 5 \\
-        4 & 3000 & 0.87 / 0.35 (val 0.82 / 0.40) & 5 & 3000 & 0.86 / 0.36 (val 0.81 / 0.41) & 5 & 3000 & 0.78 / 0.49 (val 0.75 / 0.51) & 5 \\
+        0 & Device 1 & 3000 & 0.80 & 0.45 & 0.76 & 0.48 & 5 \\
+        0 & Device 2 & 3000 & 0.79 & 0.46 & 0.75 & 0.49 & 5 \\
+        0 & Device 3 (faulty) & 3000 & 0.72 & 0.55 & 0.70 & 0.57 & 5 \\
+        1 & Device 1 & 3000 & 0.83 & 0.42 & 0.78 & 0.46 & 5 \\
+        1 & Device 2 & 3000 & 0.82 & 0.43 & 0.77 & 0.47 & 5 \\
+        1 & Device 3 (faulty) & 3000 & 0.74 & 0.53 & 0.71 & 0.55 & 5 \\
+        2 & Device 1 & 3000 & 0.85 & 0.39 & 0.80 & 0.44 & 5 \\
+        2 & Device 2 & 3000 & 0.84 & 0.40 & 0.79 & 0.45 & 5 \\
+        2 & Device 3 (faulty) & 3000 & 0.76 & 0.51 & 0.73 & 0.53 & 5 \\
+        3 & Device 1 & 3000 & 0.86 & 0.37 & 0.81 & 0.42 & 5 \\
+        3 & Device 2 & 3000 & 0.85 & 0.38 & 0.80 & 0.43 & 5 \\
+        3 & Device 3 (faulty) & 3000 & 0.77 & 0.50 & 0.74 & 0.52 & 5 \\
+        4 & Device 1 & 3000 & 0.87 & 0.35 & 0.82 & 0.40 & 5 \\
+        4 & Device 2 & 3000 & 0.86 & 0.36 & 0.81 & 0.41 & 5 \\
+        4 & Device 3 (faulty) & 3000 & 0.78 & 0.49 & 0.75 & 0.51 & 5 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -61,16 +70,25 @@ The baseline setup converges steadily despite the faulty device, but validation 
     \centering
     \caption{Training metrics with dynamic sampling}
     \label{tab:dynamic_sampling}
-    \begin{tabular}{c|ccc|ccc|ccc}
+    \begin{tabular}{c c c c c c c c}
         \toprule
-        \multirow{2}{*}{\textbf{Round}} & \multicolumn{3}{c|}{\textbf{Device 1}} & \multicolumn{3}{c|}{\textbf{Device 2}} & \multicolumn{3}{c}{\textbf{Device 3 (faulty)}} \\
-        & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward \\
+        \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & 3000 & 0.82 / 0.41 (val 0.79 / 0.44) & 6 & 3000 & 0.81 / 0.42 (val 0.78 / 0.45) & 6 & 3000 & 0.75 / 0.50 (val 0.73 / 0.52) & 4 \\
-        1 & 3000 & 0.86 / 0.37 (val 0.83 / 0.40) & 6 & 3000 & 0.85 / 0.38 (val 0.82 / 0.41) & 6 & 3000 & 0.78 / 0.47 (val 0.75 / 0.49) & 4 \\
-        2 & 3000 & 0.88 / 0.34 (val 0.85 / 0.38) & 6 & 3000 & 0.87 / 0.35 (val 0.84 / 0.39) & 6 & 3000 & 0.80 / 0.45 (val 0.77 / 0.48) & 4 \\
-        3 & 3000 & 0.89 / 0.32 (val 0.86 / 0.36) & 6 & 3000 & 0.88 / 0.33 (val 0.85 / 0.37) & 6 & 3000 & 0.81 / 0.44 (val 0.78 / 0.46) & 4 \\
-        4 & 3000 & 0.90 / 0.30 (val 0.87 / 0.34) & 6 & 3000 & 0.89 / 0.31 (val 0.86 / 0.35) & 6 & 3000 & 0.82 / 0.42 (val 0.79 / 0.45) & 4 \\
+        0 & Device 1 & 3000 & 0.82 & 0.41 & 0.79 & 0.44 & 6 \\
+        0 & Device 2 & 3000 & 0.81 & 0.42 & 0.78 & 0.45 & 6 \\
+        0 & Device 3 (faulty) & 3000 & 0.75 & 0.50 & 0.73 & 0.52 & 4 \\
+        1 & Device 1 & 3000 & 0.86 & 0.37 & 0.83 & 0.40 & 6 \\
+        1 & Device 2 & 3000 & 0.85 & 0.38 & 0.82 & 0.41 & 6 \\
+        1 & Device 3 (faulty) & 3000 & 0.78 & 0.47 & 0.75 & 0.49 & 4 \\
+        2 & Device 1 & 3000 & 0.88 & 0.34 & 0.85 & 0.38 & 6 \\
+        2 & Device 2 & 3000 & 0.87 & 0.35 & 0.84 & 0.39 & 6 \\
+        2 & Device 3 (faulty) & 3000 & 0.80 & 0.45 & 0.77 & 0.48 & 4 \\
+        3 & Device 1 & 3000 & 0.89 & 0.32 & 0.86 & 0.36 & 6 \\
+        3 & Device 2 & 3000 & 0.88 & 0.33 & 0.85 & 0.37 & 6 \\
+        3 & Device 3 (faulty) & 3000 & 0.81 & 0.44 & 0.78 & 0.46 & 4 \\
+        4 & Device 1 & 3000 & 0.90 & 0.30 & 0.87 & 0.34 & 6 \\
+        4 & Device 2 & 3000 & 0.89 & 0.31 & 0.86 & 0.35 & 6 \\
+        4 & Device 3 (faulty) & 3000 & 0.82 & 0.42 & 0.79 & 0.45 & 4 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -96,16 +114,25 @@ Dynamic sampling improves validation and inference accuracy by roughly four perc
     \centering
     \caption{Training metrics with FedAvg\,+}
     \label{tab:fedavg_plus}
-    \begin{tabular}{c|ccc|ccc|ccc}
+    \begin{tabular}{c c c c c c c c}
         \toprule
-        \multirow{2}{*}{\textbf{Round}} & \multicolumn{3}{c|}{\textbf{Device 1}} & \multicolumn{3}{c|}{\textbf{Device 2}} & \multicolumn{3}{c}{\textbf{Device 3 (faulty)}} \\
-        & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward \\
+        \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & 3000 & 0.81 / 0.40 (val 0.78 / 0.44) & 5 & 3000 & 0.80 / 0.41 (val 0.77 / 0.45) & 5 & 3000 & 0.74 / 0.49 (val 0.72 / 0.52) & 5 \\
-        1 & 3000 & 0.85 / 0.36 (val 0.82 / 0.40) & 6 & 3000 & 0.84 / 0.37 (val 0.81 / 0.41) & 6 & 3000 & 0.77 / 0.47 (val 0.74 / 0.50) & 4 \\
-        2 & 3000 & 0.88 / 0.33 (val 0.85 / 0.37) & 7 & 3000 & 0.87 / 0.34 (val 0.84 / 0.38) & 7 & 3000 & 0.79 / 0.44 (val 0.76 / 0.48) & 3 \\
-        3 & 3000 & 0.89 / 0.31 (val 0.86 / 0.36) & 7 & 3000 & 0.88 / 0.32 (val 0.85 / 0.37) & 7 & 3000 & 0.80 / 0.43 (val 0.77 / 0.47) & 3 \\
-        4 & 3000 & 0.90 / 0.29 (val 0.87 / 0.34) & 8 & 3000 & 0.89 / 0.30 (val 0.86 / 0.35) & 8 & 3000 & 0.81 / 0.41 (val 0.78 / 0.46) & 2 \\
+        0 & Device 1 & 3000 & 0.81 & 0.40 & 0.78 & 0.44 & 5 \\
+        0 & Device 2 & 3000 & 0.80 & 0.41 & 0.77 & 0.45 & 5 \\
+        0 & Device 3 (faulty) & 3000 & 0.74 & 0.49 & 0.72 & 0.52 & 5 \\
+        1 & Device 1 & 3000 & 0.85 & 0.36 & 0.82 & 0.40 & 6 \\
+        1 & Device 2 & 3000 & 0.84 & 0.37 & 0.81 & 0.41 & 6 \\
+        1 & Device 3 (faulty) & 3000 & 0.77 & 0.47 & 0.74 & 0.50 & 4 \\
+        2 & Device 1 & 3000 & 0.88 & 0.33 & 0.85 & 0.37 & 7 \\
+        2 & Device 2 & 3000 & 0.87 & 0.34 & 0.84 & 0.38 & 7 \\
+        2 & Device 3 (faulty) & 3000 & 0.79 & 0.44 & 0.76 & 0.48 & 3 \\
+        3 & Device 1 & 3000 & 0.89 & 0.31 & 0.86 & 0.36 & 7 \\
+        3 & Device 2 & 3000 & 0.88 & 0.32 & 0.85 & 0.37 & 7 \\
+        3 & Device 3 (faulty) & 3000 & 0.80 & 0.43 & 0.77 & 0.47 & 3 \\
+        4 & Device 1 & 3000 & 0.90 & 0.29 & 0.87 & 0.34 & 8 \\
+        4 & Device 2 & 3000 & 0.89 & 0.30 & 0.86 & 0.35 & 8 \\
+        4 & Device 3 (faulty) & 3000 & 0.81 & 0.41 & 0.78 & 0.46 & 2 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -132,16 +159,25 @@ Waiting for all registered devices before aggregating, coupled with Krum-based s
     \centering
     \caption{Training metrics with streaming chunks}
     \label{tab:streaming_chunks}
-    \begin{tabular}{c|ccc|ccc|ccc}
+    \begin{tabular}{c c c c c c c c}
         \toprule
-        \multirow{2}{*}{\textbf{Round}} & \multicolumn{3}{c|}{\textbf{Device 1}} & \multicolumn{3}{c|}{\textbf{Device 2}} & \multicolumn{3}{c}{\textbf{Device 3 (faulty)}} \\
-        & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward & Samples & Acc./Loss & Reward \\
+        \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & 2000 & 0.81 / 0.42 (val 0.78 / 0.45) & 6 & 2000 & 0.80 / 0.43 (val 0.77 / 0.46) & 6 & 2000 & 0.74 / 0.49 (val 0.72 / 0.52) & 4 \\
-        1 & 2000 & 0.85 / 0.38 (val 0.82 / 0.41) & 6 & 2000 & 0.84 / 0.39 (val 0.81 / 0.42) & 6 & 2000 & 0.77 / 0.47 (val 0.74 / 0.50) & 4 \\
-        2 & 2000 & 0.87 / 0.35 (val 0.84 / 0.38) & 7 & 2000 & 0.86 / 0.36 (val 0.83 / 0.39) & 7 & 2000 & 0.79 / 0.45 (val 0.76 / 0.48) & 3 \\
-        3 & 2000 & 0.88 / 0.33 (val 0.85 / 0.36) & 7 & 2000 & 0.87 / 0.34 (val 0.84 / 0.37) & 7 & 2000 & 0.80 / 0.44 (val 0.77 / 0.47) & 3 \\
-        4 & 2000 & 0.89 / 0.31 (val 0.86 / 0.34) & 7 & 2000 & 0.88 / 0.32 (val 0.85 / 0.35) & 7 & 2000 & 0.81 / 0.43 (val 0.78 / 0.46) & 3 \\
+        0 & Device 1 & 2000 & 0.81 & 0.42 & 0.78 & 0.45 & 6 \\
+        0 & Device 2 & 2000 & 0.80 & 0.43 & 0.77 & 0.46 & 6 \\
+        0 & Device 3 (faulty) & 2000 & 0.74 & 0.49 & 0.72 & 0.52 & 4 \\
+        1 & Device 1 & 2000 & 0.85 & 0.38 & 0.82 & 0.41 & 6 \\
+        1 & Device 2 & 2000 & 0.84 & 0.39 & 0.81 & 0.42 & 6 \\
+        1 & Device 3 (faulty) & 2000 & 0.77 & 0.47 & 0.74 & 0.50 & 4 \\
+        2 & Device 1 & 2000 & 0.87 & 0.35 & 0.84 & 0.38 & 7 \\
+        2 & Device 2 & 2000 & 0.86 & 0.36 & 0.83 & 0.39 & 7 \\
+        2 & Device 3 (faulty) & 2000 & 0.79 & 0.45 & 0.76 & 0.48 & 3 \\
+        3 & Device 1 & 2000 & 0.88 & 0.33 & 0.85 & 0.36 & 7 \\
+        3 & Device 2 & 2000 & 0.87 & 0.34 & 0.84 & 0.37 & 7 \\
+        3 & Device 3 (faulty) & 2000 & 0.80 & 0.44 & 0.77 & 0.47 & 3 \\
+        4 & Device 1 & 2000 & 0.89 & 0.31 & 0.86 & 0.34 & 7 \\
+        4 & Device 2 & 2000 & 0.88 & 0.32 & 0.85 & 0.35 & 7 \\
+        4 & Device 3 (faulty) & 2000 & 0.81 & 0.43 & 0.78 & 0.46 & 3 \\
         \bottomrule
     \end{tabular}
 \end{table}
