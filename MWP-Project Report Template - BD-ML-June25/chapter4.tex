@@ -44,7 +44,7 @@ The classic model training setup within Kafka-ML was configured and tested. This
 \subsection{Federated Learning Module Architecture}
 \label{subsec:federated_learning_module}
 
-Federated deployments reuse the classic Kafka-ML services (frontend, backend API, model training, model inference) and add asynchronous coordination so that models and client datasets remain decoupled until a federated round is ready. Figure~\ref{fig:fed_arch_flow} (to be added) will illustrate the flow; the key stages are summarised below.
+Federated deployments reuse the classic Kafka-ML services (frontend, backend API, model training, model inference) and add asynchronous coordination so that models and client datasets remain decoupled until a federated round is ready. the key stages are summarised below.
 
 \begin{enumerate}
     \item \textbf{User orchestration via Frontend/Backend:} Operators configure models and deployments through the standard frontend. The backend persists those definitions and emits control messages, extending the classic workflow with federated-specific metadata.
