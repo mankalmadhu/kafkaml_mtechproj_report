@@ -383,7 +383,7 @@ Key behavioural differences from the vanilla run include:
     \item The backend wallet ledger reflects credit transfers per round, enabling traceable incentive payouts per client.
 \end{itemize}
 
-Placeholder screenshots below will be populated with the blockchain-specific controller and worker logs, contract dashboards, and reward summaries once the full experiment set is captured.
+The deployment process and operational status for the blockchain-instrumented federated training are illustrated in Figs.~\ref{fig:blockchain_fed_placeholders} and \ref{fig:blockchain_fed_placeholders2}.
 
 \begin{figure}[h!]
     \centering
@@ -391,29 +391,50 @@ Placeholder screenshots below will be populated with the blockchain-specific con
         \begin{tabular}{cc}
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Blockchain-enabled controller pod logs}}
-                \caption{Controller Logs}
+                \includegraphics[width=\linewidth]{screenshots_federated_blokchain/1_pods_running.png}
+                \caption{Initial Running Pods}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker reward calculation output}}
-                \caption{Reward Metrics}
+                \includegraphics[width=\linewidth]{screenshots_federated_blokchain/2_pods_running_after_deployment.png}
+                \caption{Pods After Deployment}
             \end{subfigure} \\
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Smart contract dashboard snapshot}}
-                \caption{Contract Dashboard}
+                \includegraphics[width=\linewidth]{screenshots_federated_blokchain/3_pods_running_after_fed_training_worker.png}
+                \caption{Worker Training Pods}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Backend wallet transaction list}}
-                \caption{Wallet Activity}
+                \includegraphics[width=\linewidth]{screenshots_federated_blokchain/4_data_injection.png}
+                \caption{Data Injection}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Placeholder grid for blockchain-instrumented federated training}
+    \caption{Blockchain-instrumented federated training deployment and initialization}
     \label{fig:blockchain_fed_placeholders}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{adjustbox}{bgcolor=gray!20, padding=0.7em, margin=1ex}
+        \begin{tabular}{cc}
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{screenshots_federated_blokchain/5_worker_training_logs.png}
+                \caption{Worker Training Logs}
+            \end{subfigure} &
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{screenshots_federated_blokchain/6_cotroller_training_logs.png}
+                \caption{Controller Training Logs}
+            \end{subfigure}
+        \end{tabular}
+    \end{adjustbox}
+    \vskip\baselineskip
+    \caption{Blockchain-instrumented federated training execution and blockchain logging}
+    \label{fig:blockchain_fed_placeholders2}
 \end{figure}
 
 
