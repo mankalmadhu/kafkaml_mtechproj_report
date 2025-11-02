@@ -279,92 +279,70 @@ Once the Kafka-ML system was successfully deployed on Minikube, the frontend app
 The successful execution of these steps validated the core functionalities of the Kafka-ML classic model architecture and confirmed that the local deployment environment was correctly configured for further development and experimentation.
 
 
-\subsection{Setup and Initial Run of Federated Learning Module (Non-Distributed)}
-\label{subsec:federated_setup_non_distributed}
+\subsection{Setup of Single Federated Classic Training for Occupancy Dataset}
+\label{subsec:single_fed_classic_occupancy}
 
-Following the successful validation of the classic model architecture, the next phase focused on setting up the federated learning module. For this initial stage, the setup was configured for non-distributed datasets to test the core components of the federated backend, model control, and data control mechanisms.
+With the core federated services validated on MNIST, the next milestone was to exercise the end-to-end pipeline using the room occupancy dataset. This scenario activates the ``single federated classic'' path—one federated worker representing an edge site, but now consuming realistic sensor streams and producing blockchain-ready control records.
 
-\paragraph{Dockerization and Kubernetes Deployment for Federated Module}
-Similar to the classic setup, the federated learning module components were prepared for a containerized deployment as shown in Fig. \ref{fig:collage7}:
-\begin{itemize}
-    \item Docker images for the federated learning specific components (e.g., Federated Backend, Federated Model Control Logger, Federated Data Control Logger, Federated Model Training) were built. This process included integrating necessary libraries and adjustments for the federated workflow.
-    \item These images were subsequently pushed to a Docker registry.
-    \item Kustomization files were adapted and created to define the deployment configuration for the federated learning services on the local Minikube Kubernetes cluster.
-    \item The federated learning module was then deployed to the Minikube cluster.
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Build Kafka-ML base images:} From the repository root, the `./build.sh` script compiled the frontend, backend, model training, model inference, and logger services. Configuration bundles were updated to reference the occupancy-specific Kafka topics.
+
+    \item \textbf{Build federated module images:} Inside `federated-module/`, executing its `./build.sh` produced the federated backend, model/data control loggers, and TensorFlow training worker images, embedding the smart-contract artefacts and wallet credentials required for later auditing.
+
+    \item \textbf{Deploy Kafka-ML core via Kustomize:} Applying `kubectl apply -k kustomize/local` brought up the classic services configured to expose the APIs needed for federated orchestration of the occupancy use case.
+
+    \item \textbf{Deploy federated services via Kustomize:} The command `kubectl apply -k federated-module/kustomize/local` launched the federated backend, control loggers, worker job template, and blockchain helpers. All pods were verified in `Running` state before proceeding.
+
+    \item \textbf{Register model, configuration, and deployment:} Through the Kafka-ML frontend UI a TensorFlow CNN tailored to the occupancy dataset was uploaded, the configuration enabled federated learning, and the deployment bound the model to the occupancy data stream with the desired aggregation cadence.
+
+    \item \textbf{Controller job activation:} Creating the deployment triggered the federated controller job, which fetched the model artefact and control payload from Kafka and acknowledged receipt back to the backend.
+
+    \item \textbf{Backend receives model metadata:} The federated backend stored the architecture and control envelope, persisting hashes to the blockchain where configured, and waited for matching data control messages.
+
+    \item \textbf{Occupancy data ingestion:} A dedicated injector streamed occupancy sensor readings to the Kafka data topic while publishing the control metadata (client ID, shard size, offsets) to the federated data control topic.
+
+    \item \textbf{Collision detection and worker launch:} When matching model and data control entries appeared, the federated backend triggered the single-worker Kubernetes job. The worker retrieved the model weights, consumed the referenced occupancy batch, and commenced local training.
+
+    \item \textbf{Local training and result publication:} After completing its epochs, the worker emitted training and validation metrics, uploaded the updated weights to the aggregation topic, and recorded the contribution on the blockchain. The controller then performed aggregation (trivial with a single worker) and prepared for the next data chunk.
+\end{enumerate}
+
+Placeholder panels below will be populated with screenshots from this occupancy walkthrough (build logs, frontend submissions, controller status, worker metrics) once the experiment gallery is finalised.
 
 \begin{figure}[h!]
     \centering
     \begin{adjustbox}{bgcolor=gray!20, padding=0.7em, margin=1ex}
         \begin{tabular}{cc}
-            % First row
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{\linewidth}{\centering\vspace{3cm}[Placeholder: Build Script]}}
-                \caption{Build Script}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Kafka-ML build script output}}
+                \caption{Kafka-ML Build}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{\linewidth}{\centering\vspace{3cm}[Placeholder: Docker Images]}}
-                \caption{Docker Images}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Federated module build output}}
+                \caption{Federated Build}
             \end{subfigure} \\
-            % Second row
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{\linewidth}{\centering\vspace{3cm}[Placeholder: Deployment Script]}}
-                \caption{Deployment Script}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Frontend deployment showing occupancy model}}
+                \caption{Frontend Flow}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{\linewidth}{\centering\vspace{3cm}[Placeholder: Running Kubernetes Pods]}}
-                \caption{Running Kubernetes Pods}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker training metrics}}
+                \caption{Worker Metrics}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Federated Kafka ML Build and Deploy Steps}
-    \label{fig:collage7}
+    \caption{Placeholder grid for single federated classic occupancy run}
+    \label{fig:occupancy_fed_single}
 \end{figure}
-
-\paragraph{Configuration via Federated Backend (Django Admin UI)}
-Once the federated module was running on Minikube, the Django Admin UI, serving as part of the Federated Backend, was used to configure and initiate the federated training process:
-
-\begin{enumerate}
-    \item \textbf{Submission of Model Control Dataset:} The model control dataset, which dictates the parameters and configurations for the federated model training (e.g., model architecture, aggregation strategy), was submitted through the Django Admin UI (see Fig. \ref{fig:model_control_submission}).
-    % Placeholder for a screenshot of submitting model control dataset
-    \begin{figure}[h!]
-        \centering
-        \fbox{\parbox{0.7\textwidth}{\centering\vspace{4cm}[Placeholder: Model Control Input]}}
-        \caption{Submitting the Model Control Input via the Federated Backend.}
-        \label{fig:model_control_submission}
-    \end{figure}
-
-    \item \textbf{Submission of Data Control Dataset:} Subsequently, the data control dataset was submitted as shown in Fig. \ref{fig:data_control_submission}. For this non-distributed setup, this dataset defines how the available MNIST data should be treated or partitioned for the federated training simulation.
-    % Placeholder for a screenshot of submitting data control dataset
-    \begin{figure}[h!]
-        \centering
-        \fbox{\parbox{0.7\textwidth}{\centering\vspace{4cm}[Placeholder: Data Control Input]}}
-        \caption{Data Control Submission}
-        \label{fig:data_control_submission}
-    \end{figure}
-\end{enumerate}
-
-\paragraph{Initiating and Observing Federated Training Job}
-After the successful submission of both the model control and data control datasets, the federated training job as shown in Fig. \ref{fig:federated_training_job} was initiated. The system then began the process of (simulated) distributed training based on the provided configurations.
-% Placeholder for a screenshot of the running training job
-\begin{figure}[h!]
-    \centering
-    \fbox{\parbox{0.8\textwidth}{\centering\vspace{4cm}[Placeholder: Federated Training Job Running]}}
-    \caption{Federated Training}
-    \label{fig:federated_training_job}
-\end{figure}
-
-The ability to deploy the federated module and trigger a training job using the control datasets submitted via the Django Admin UI confirmed the operational status of these critical components. This lays the groundwork for expanding to truly distributed data sources and integrating blockchain functionalities as outlined in the project plan.
 
 \subsection{Federated Training with Blockchain Instrumentation}
 \label{subsec:fed_blockchain_setup}
 
-The blockchain-enabled run reuses the deployment steps from Section~\ref{subsec:federated_setup_non_distributed}: the same build scripts prepare Kafka-ML and federated images, Kustomize descriptors deploy the pods, and the frontend initiates the model/config/deployment objects. The change lies in the artefacts: controller and worker jobs reference the blockchain-specific manifests, smart-contract credentials, and emit on-chain audit trails during training.
+The blockchain-enabled run reuses the deployment steps from Section~\ref{subsec:single_fed_classic_occupancy}: the same build scripts prepare Kafka-ML and federated images, Kustomize descriptors deploy the pods, and the frontend initiates the model/config/deployment objects. The change lies in the artefacts: controller and worker jobs reference the blockchain-specific manifests, smart-contract credentials, and emit on-chain audit trails during training.
 
 Key behavioural differences from the vanilla run include:
 
