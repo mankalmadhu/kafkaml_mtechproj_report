@@ -106,15 +106,15 @@ Dynamic sampling exacerbates the faulty device's negative impact. Device 3 produ
         \toprule
         \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & Device 2 & 8144 & 0.9853 & 0.0546 & 0.9902 & 0.0425 & 100.00 \\
-        0 & Device 1 & 12216 & 0.9887 & 0.0463 & 0.9881 & 0.0387 & 60.00 \\
-        0 & Device 3 (faulty) & 8142 & 0.8001 & 0.5063 & 0.7993 & 0.5058 & 28.57 \\
-        1 & Device 2 & 8144 & 0.9851 & 0.0562 & 0.9902 & 0.0433 & 28.57 \\
-        1 & Device 3 (faulty) & 8142 & 0.8001 & 0.5049 & 0.7993 & 0.5069 & 9.52 \\
-        1 & Device 1 & 12216 & 0.9884 & 0.0491 & 0.9881 & 0.0399 & 42.86 \\
-        2 & Device 2 & 8144 & 0.9876 & 0.0511 & 0.9902 & 0.0409 & 9.52 \\
-        2 & Device 3 (faulty) & 8142 & 0.7995 & 0.5094 & 0.7993 & 0.5192 & 0.00 \\
-        2 & Device 1 & 12216 & 0.9889 & 0.0442 & 0.9885 & 0.0374 & 21.43 \\
+        0 & Device 1 & 12216 & 0.9885 & 0.0476 & 0.9892 & 0.0417 & 60.00 \\
+        0 & Device 2 & 8144 & 0.9862 & 0.0553 & 0.9883 & 0.0468 & 100.00 \\
+        0 & Device 3 (faulty) & 8142 & 0.8001 & 0.5093 & 0.7999 & 0.5054 & 28.57 \\
+        1 & Device 1 & 12216 & 0.9887 & 0.0489 & 0.9892 & 0.0428 & 42.86 \\
+        1 & Device 2 & 8144 & 0.9859 & 0.0572 & 0.9884 & 0.0484 & 28.57 \\
+        1 & Device 3 (faulty) & 8142 & 0.8001 & 0.5040 & 0.7999 & 0.5033 & 14.28 \\
+        2 & Device 1 & 12216 & 0.9899 & 0.0440 & 0.9895 & 0.0404 & 21.43 \\
+        2 & Device 2 & 8144 & 0.9873 & 0.0527 & 0.9885 & 0.0462 & 9.52 \\
+        2 & Device 3 (faulty) & 8142 & 0.8001 & 0.5059 & 0.7999 & 0.5070 & 0.00 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -132,7 +132,7 @@ Dynamic sampling exacerbates the faulty device's negative impact. Device 3 produ
     \end{tabular}
 \end{table}
 
-Waiting for all registered devices before aggregating, coupled with Krum-based selection, further suppresses the influence of the faulty device. Reward tokens now reflect contribution quality: honest devices receive higher payouts as their updates align with the consensus, while the faulty device's rewards diminish over successive rounds.
+FedAvg\,+ with Krum-based aggregation successfully mitigates the faulty device's influence. Honest devices achieve accuracy 0.98–0.99; Device 3 remains at 0.80. Krum’s outlier suppression plus declining rewards (28.57 → 14.28 → 0.00) reduce its weight; inference accuracy is 100\%.
 
 \section{Incremental Streaming Performance}
 
