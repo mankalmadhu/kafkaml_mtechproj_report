@@ -306,7 +306,7 @@ With the core federated services validated on MNIST, the next milestone was to e
     \item \textbf{Local training and result publication:} After completing its epochs, the worker emitted training and validation metrics, uploaded the updated weights to the aggregation topic, and recorded the contribution on the blockchain. The controller then performed aggregation (trivial with a single worker) and prepared for the next data chunk.
 \end{enumerate}
 
-Placeholder panels below will be populated with screenshots from this occupancy walkthrough (build logs, frontend submissions, controller status, worker metrics) once the experiment gallery is finalised.
+The deployment process and operational status for the occupancy dataset federated training are illustrated in Fig.~\ref{fig:occupancy_fed_single}.
 
 \begin{figure}[h!]
     \centering
@@ -314,28 +314,28 @@ Placeholder panels below will be populated with screenshots from this occupancy 
         \begin{tabular}{cc}
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Kafka-ML build script output}}
+                \includegraphics[width=\linewidth]{screenshots_federated/1_build_script.png}
                 \caption{Kafka-ML Build}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Federated module build output}}
-                \caption{Federated Build}
+                \includegraphics[width=\linewidth]{screenshots_federated/2_Deployment_Script.png}
+                \caption{Federated Deployment}
             \end{subfigure} \\
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Frontend deployment showing occupancy model}}
-                \caption{Frontend Flow}
+                \includegraphics[width=\linewidth]{screenshots_federated/3_running-pods.png}
+                \caption{Running Pods}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker training metrics}}
-                \caption{Worker Metrics}
+                \includegraphics[width=\linewidth]{screenshots_federated/4_running_pods_after_deployment.png}
+                \caption{Pods After Deployment}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Placeholder grid for single federated classic occupancy run}
+    \caption{Single federated classic occupancy dataset run setup}
     \label{fig:occupancy_fed_single}
 \end{figure}
 
@@ -352,7 +352,7 @@ Key behavioural differences from the vanilla run include:
     \item The backend wallet ledger reflects credit transfers per round, enabling traceable incentive payouts per client.
 \end{itemize}
 
-The deployment process and operational status of the federated module with blockchain instrumentation are illustrated in Fig.~\ref{fig:blockchain_fed_placeholders}.
+Placeholder screenshots below will be populated with the blockchain-specific controller and worker logs, contract dashboards, and reward summaries once the full experiment set is captured.
 
 \begin{figure}[h!]
     \centering
@@ -360,28 +360,28 @@ The deployment process and operational status of the federated module with block
         \begin{tabular}{cc}
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \includegraphics[width=\linewidth]{screenshots_federated/1_build_script.png}
-                \caption{Build Script}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Blockchain-enabled controller pod logs}}
+                \caption{Controller Logs}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \includegraphics[width=\linewidth]{screenshots_federated/2_Deployment_Script.png}
-                \caption{Deployment Script}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker reward calculation output}}
+                \caption{Reward Metrics}
             \end{subfigure} \\
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \includegraphics[width=\linewidth]{screenshots_federated/3_running-pods.png}
-                \caption{Running Pods}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Smart contract dashboard snapshot}}
+                \caption{Contract Dashboard}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \includegraphics[width=\linewidth]{screenshots_federated/4_running_pods_after_deployment.png}
-                \caption{Pods After Deployment}
+                \fbox{\parbox{0.9\linewidth}{Placeholder: Backend wallet transaction list}}
+                \caption{Wallet Activity}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Federated Kafka ML Build and Deploy Steps (Blockchain-enabled)}
+    \caption{Placeholder grid for blockchain-instrumented federated training}
     \label{fig:blockchain_fed_placeholders}
 \end{figure}
 
