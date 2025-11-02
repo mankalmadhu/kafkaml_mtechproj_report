@@ -352,7 +352,7 @@ Key behavioural differences from the vanilla run include:
     \item The backend wallet ledger reflects credit transfers per round, enabling traceable incentive payouts per client.
 \end{itemize}
 
-Placeholder screenshots below will be populated with the blockchain-specific controller and worker logs, contract dashboards, and reward summaries once the full experiment set is captured.
+The deployment process and operational status of the federated module with blockchain instrumentation are illustrated in Fig.~\ref{fig:blockchain_fed_placeholders}.
 
 \begin{figure}[h!]
     \centering
@@ -360,28 +360,28 @@ Placeholder screenshots below will be populated with the blockchain-specific con
         \begin{tabular}{cc}
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Blockchain-enabled controller pod logs}}
-                \caption{Controller Logs}
+                \includegraphics[width=\linewidth]{screenshots_federated/1_build_script.png}
+                \caption{Build Script}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Worker reward calculation output}}
-                \caption{Reward Metrics}
+                \includegraphics[width=\linewidth]{screenshots_federated/2_Deployment_Script.png}
+                \caption{Deployment Script}
             \end{subfigure} \\
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Smart contract dashboard snapshot}}
-                \caption{Contract Dashboard}
+                \includegraphics[width=\linewidth]{screenshots_federated/3_running-pods.png}
+                \caption{Running Pods}
             \end{subfigure} &
             \begin{subfigure}{0.48\textwidth}
                 \centering
-                \fbox{\parbox{0.9\linewidth}{Placeholder: Backend wallet transaction list}}
-                \caption{Wallet Activity}
+                \includegraphics[width=\linewidth]{screenshots_federated/4_running_pods_after_deployment.png}
+                \caption{Pods After Deployment}
             \end{subfigure}
         \end{tabular}
     \end{adjustbox}
     \vskip\baselineskip
-    \caption{Placeholder grid for blockchain-instrumented federated training}
+    \caption{Federated Kafka ML Build and Deploy Steps (Blockchain-enabled)}
     \label{fig:blockchain_fed_placeholders}
 \end{figure}
 
