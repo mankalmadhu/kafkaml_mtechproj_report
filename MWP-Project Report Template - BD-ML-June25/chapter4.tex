@@ -306,7 +306,7 @@ With the core federated services validated on MNIST, the next milestone was to e
     \item \textbf{Local training and result publication:} After completing its epochs, the worker emitted training and validation metrics, uploaded the updated weights to the aggregation topic, and recorded the contribution on the blockchain. The controller then performed aggregation (trivial with a single worker) and prepared for the next data chunk.
 \end{enumerate}
 
-The deployment process and operational status for the occupancy dataset federated training are illustrated in Fig.~\ref{fig:occupancy_fed_single}.
+The deployment process and operational status for the occupancy dataset federated training are illustrated in Figs.~\ref{fig:occupancy_fed_single} and \ref{fig:occupancy_fed_single2}.
 
 \begin{figure}[h!]
     \centering
@@ -337,6 +337,37 @@ The deployment process and operational status for the occupancy dataset federate
     \vskip\baselineskip
     \caption{Single federated classic occupancy dataset run setup}
     \label{fig:occupancy_fed_single}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{adjustbox}{bgcolor=gray!20, padding=0.7em, margin=1ex}
+        \begin{tabular}{cc}
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{screenshots_federated/4a_data_injection_logs.png}
+                \caption{Data Injection Logs}
+            \end{subfigure} &
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{screenshots_federated/5_running_pods_after_wroker_training_starts.png}
+                \caption{Worker Training Pods}
+            \end{subfigure} \\
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{screenshots_federated/6_worker_training_logs.png}
+                \caption{Worker Training Logs}
+            \end{subfigure} &
+            \begin{subfigure}{0.48\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{screenshots_federated/7_controller_training_logs.png}
+                \caption{Controller Training Logs}
+            \end{subfigure}
+        \end{tabular}
+    \end{adjustbox}
+    \vskip\baselineskip
+    \caption{Occupancy dataset federated training execution and monitoring}
+    \label{fig:occupancy_fed_single2}
 \end{figure}
 
 \subsection{Federated Training with Blockchain Instrumentation}
