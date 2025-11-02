@@ -68,21 +68,15 @@ The baseline setup converges steadily despite the faulty device, but validation 
         \toprule
         \textbf{Round} & \textbf{Device} & \textbf{Samples} & \textbf{Train Acc.} & \textbf{Train Loss} & \textbf{Val. Acc.} & \textbf{Val. Loss} & \textbf{Reward} \\
         \midrule
-        0 & Device 1 & 3000 & 0.82 & 0.41 & 0.79 & 0.44 & 6 \\
-        0 & Device 2 & 3000 & 0.81 & 0.42 & 0.78 & 0.45 & 6 \\
-        0 & Device 3 (faulty) & 3000 & 0.75 & 0.50 & 0.73 & 0.52 & 4 \\
-        1 & Device 1 & 3000 & 0.86 & 0.37 & 0.83 & 0.40 & 6 \\
-        1 & Device 2 & 3000 & 0.85 & 0.38 & 0.82 & 0.41 & 6 \\
-        1 & Device 3 (faulty) & 3000 & 0.78 & 0.47 & 0.75 & 0.49 & 4 \\
-        2 & Device 1 & 3000 & 0.88 & 0.34 & 0.85 & 0.38 & 6 \\
-        2 & Device 2 & 3000 & 0.87 & 0.35 & 0.84 & 0.39 & 6 \\
-        2 & Device 3 (faulty) & 3000 & 0.80 & 0.45 & 0.77 & 0.48 & 4 \\
-        3 & Device 1 & 3000 & 0.89 & 0.32 & 0.86 & 0.36 & 6 \\
-        3 & Device 2 & 3000 & 0.88 & 0.33 & 0.85 & 0.37 & 6 \\
-        3 & Device 3 (faulty) & 3000 & 0.81 & 0.44 & 0.78 & 0.46 & 4 \\
-        4 & Device 1 & 3000 & 0.90 & 0.30 & 0.87 & 0.34 & 6 \\
-        4 & Device 2 & 3000 & 0.89 & 0.31 & 0.86 & 0.35 & 6 \\
-        4 & Device 3 (faulty) & 3000 & 0.82 & 0.42 & 0.79 & 0.45 & 4 \\
+        0 & Device 1 & 12216 & 0.9914 & 0.0454 & 0.9915 & 0.0392 & 60.00 \\
+        0 & Device 2 & 8144 & 0.9884 & 0.0575 & 0.9906 & 0.0454 & 100.00 \\
+        0 & Device 3 (faulty) & 8142 & 0.5089 & 0.6927 & 0.5152 & 0.6930 & 28.57 \\
+        1 & Device 1 & 12216 & 0.9901 & 0.0458 & 0.9912 & 0.0390 & 42.86 \\
+        1 & Device 2 & 8144 & 0.9892 & 0.0546 & 0.9904 & 0.0455 & 28.57 \\
+        1 & Device 3 (faulty) & 8142 & 0.5077 & 0.6924 & 0.5203 & 0.6920 & 14.28 \\
+        2 & Device 1 & 12216 & 0.9917 & 0.0440 & 0.9921 & 0.0363 & 21.43 \\
+        2 & Device 2 & 8144 & 0.9899 & 0.0510 & 0.9908 & 0.0433 & 9.52 \\
+        2 & Device 3 (faulty) & 8142 & 0.5029 & 0.7010 & 0.5160 & 0.7026 & 0.00 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -95,12 +89,12 @@ The baseline setup converges steadily despite the faulty device, but validation 
         \toprule
         \textbf{Inference Samples} & \textbf{Accuracy} \\
         \midrule
-        20 & 0.85 \\
+        30 & 0.50 \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-Dynamic sampling improves validation and inference accuracy by roughly four percentage points. Rewards begin to diverge because honest devices supply more balanced updates, while the faulty device receives proportionally fewer tokens.
+Dynamic sampling exacerbates the faulty device's negative impact. Device 3 produces random predictions (accuracy 0.50–0.52) and is penalized with declining rewards (100.00 → 28.57 → 0.00). Honest devices train well (accuracy 0.98–0.99), but the random updates degrade inference to 0.50, worse than the baseline.
 
 \section{With FedAvg\,+ }
 
