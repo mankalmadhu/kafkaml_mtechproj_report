@@ -56,7 +56,7 @@ Unless noted otherwise, results are averaged across three consecutive runs to sm
     \end{tabular}
 \end{table}
 
-The baseline setup converges steadily despite the faulty device, but validation and inference accuracy plateau around 81\%, indicating residual class imbalance and the effect of noisy updates. Rewards remain uniform because FedAvg treats all updates equally, even when the faulty device drifts from the consensus.
+The baseline setup achieves stable convergence despite the faulty device. Honest devices reach high accuracy (0.98–0.99), while Device 3 remains lower at 0.80. Rewards diverge significantly across rounds (100.00 → 9.52 for Device 2), reflecting quality-based compensation. Inference accuracy is 100\%, demonstrating effective aggregation of honest contributions.
 
 \section{Dynamic Sampling Evaluation}
 
@@ -212,5 +212,5 @@ The combined setup (dynamic sampling, FedAvg+, and streaming) trains on fresh ch
 
 \section{Discussion}
 
-Across the scenarios, dynamic sampling and streaming deliver incremental gains, but their combination with FedAvg\,+ yields the most resilient training cycle. The Krum-based selection guards against corrupted updates, while device registration ensures fairness and transparent rewards. Blockchain logging distinguishes honest contributions from faulty ones, paving the way for incentive-driven federated deployments. These findings motivate the future work outlined in Chapter~\ref{chap:environment}.
+Across the five scenarios, several findings emerge. The baseline configuration achieves 100\% inference despite the faulty device's lower accuracy (0.80). Adding dynamic sampling alone degrades inference to 0.50 because Device 3 produces random predictions; Krum-based aggregation and streaming each independently restore inference to 100\%. The combined setup (dynamic sampling, FedAvg\,+, and streaming) reaches 100\% accuracy despite Device 3’s random outputs, confirming the resilience of Krum-based outlier suppression. In all schemes with reward divergence, Device 3’s tokens fall to zero by round 2, showing quality-based compensation. These results validate device registration and blockchain-mediated rewards, paving the way for incentive-driven federated deployments. These findings motivate the future work outlined in Chapter~\ref{chap:environment}.
 
