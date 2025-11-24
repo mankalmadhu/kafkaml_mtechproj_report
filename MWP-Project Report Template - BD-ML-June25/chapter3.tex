@@ -8,8 +8,41 @@ The process depicted in Figure \ref{fig:methodology_flow} is logically divided i
 \begin{sidewaysfigure}[htbp]
     \centering
     \includegraphics[scale=0.185]{MWP-Project Report Template - BD-ML-June25/methodology.png} % Include your image
-    \caption{Methodology Flow Diagram}
+    \caption{Methodology Flow Diagram - Complete Process Flow}
     \label{fig:methodology_flow} % A unique label for cross-referencing this specific figure
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \includegraphics[scale=0.185]{MWP-Project Report Template - BD-ML-June25/methodology.png}
+    
+    \vspace{0.5cm}
+    
+    % Phase legend/key - stacked vertically for better readability
+    \begin{center}
+    \begin{tikzpicture}
+        % Phase 1 box
+        \node[draw=blue!60,fill=blue!20,line width=1.5pt,rounded corners=3pt,
+              text=blue!90!black,font=\bfseries,minimum width=18cm,minimum height=0.6cm,
+              align=center] at (0,1.2) 
+            {\textbf{Phase 1: Initialization} (Steps 1-7)};
+        
+        % Phase 2 box  
+        \node[draw=red!60,fill=red!20,line width=1.5pt,rounded corners=3pt,
+              text=red!90!black,font=\bfseries,minimum width=18cm,minimum height=0.6cm,
+              align=center] at (0,0.3) 
+            {\textbf{Phase 2: Federated Training Loop} (Steps 8-16)};
+        
+        % Phase 3 box
+        \node[draw=green!60,fill=green!20,line width=1.5pt,rounded corners=3pt,
+              text=green!90!black,font=\bfseries,minimum width=18cm,minimum height=0.6cm,
+              align=center] at (0,-0.6) 
+            {\textbf{Phase 3: Finalization} (Steps 17-18)};
+    \end{tikzpicture}
+    \end{center}
+    
+    \caption{Methodology Flow Diagram with Phase Identification - The complete process flow showing all interactions and data exchanges. The diagram is logically divided into three sequential phases as indicated by the horizontal dividers and phase markers: \textcolor{blue!90!black}{\textbf{Initialization}} (top section), \textcolor{red!90!black}{\textbf{Federated Training Loop}} (middle section with loop indicator), and \textcolor{green!90!black}{\textbf{Finalization}} (bottom section). The narrative continuity is preserved, illustrating the complete end-to-end federated learning process.}
+    \label{fig:methodology_phases}
 \end{sidewaysfigure}
 
 
