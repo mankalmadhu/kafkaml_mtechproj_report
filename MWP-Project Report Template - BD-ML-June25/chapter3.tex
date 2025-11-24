@@ -4,7 +4,6 @@
 
 The process depicted in Figure \ref{fig:methodology_full} is logically divided into three distinct and sequential phases: the Initialization Phase, the Federated Training Loop, and the Finalization Phase. Each phase orchestrates specific interactions between the central server, the data exchange components (including the Ethereum Blockchain and Platform Kafka), and the various client-side elements. The Initialization Phase focuses on setting up the environment and preparing the initial global model, as well as securely registering baseline model weights. Following this, the Federated Training Loop represents the iterative core of the system, where local training on client data is combined with central aggregation to collaboratively improve the global model while preserving data privacy. Finally, the Finalization Phase concludes the process by delivering the trained model and ensuring that all contributions are fairly accounted for through blockchain verification, followed by the release of resources. The subsequent sections will detail each of these phases, outlining the key actors involved and the sequence of operations.
 
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Federated_Full.png}
@@ -12,33 +11,19 @@ The process depicted in Figure \ref{fig:methodology_full} is logically divided i
     \label{fig:methodology_full}
 \end{figure}
 
-\begin{sidewaysfigure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase1_Init.png}
-    \caption{Phase 1: Initialization Phase (Steps 1-7) - Setup, model deployment, and blockchain registration}
-    \label{fig:methodology_phase1}
-\end{sidewaysfigure}
-
-\begin{sidewaysfigure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase2_Loop.png}
-    \caption{Phase 2: Federated Training Loop (Steps 8-16) - Iterative local training and central aggregation}
-    \label{fig:methodology_phase2}
-\end{sidewaysfigure}
-
-\begin{sidewaysfigure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase3_Final.png}
-    \caption{Phase 3: Finalization Phase (Steps 17-18) - Model delivery and resource release}
-    \label{fig:methodology_phase3}
-\end{sidewaysfigure}
-
 
 
 \section{Initialization Phase}
 \label{sec:initialization_phase}
 
 The Initialization Phase, depicted in Figure \ref{fig:methodology_phase1}, focuses on setting up the environment for federated learning. Its primary objective is to prepare the initial global model, ready participating clients for training, and securely register baseline model weights.
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase1_Init.png}
+    \caption{Phase 1: Initialization Phase (Steps 1-7) - Setup, model deployment, and blockchain registration}
+    \label{fig:methodology_phase1}
+\end{sidewaysfigure}
 
 \subsection{Key Actors and Their Roles}
 \label{ssec:init_actors}
@@ -62,6 +47,13 @@ The sequence of events in the Initialization Phase is as follows:
 \label{sec:training_loop}
 
 The Federated Training Loop, depicted in Figure \ref{fig:methodology_phase2}, represents the iterative core of the federated learning process. Its main purpose is to collaboratively improve the global model by leveraging local training on client data, while rigorously preserving data privacy. This loop is repeated until predefined convergence criteria or a maximum number of training rounds are met.
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase2_Loop.png}
+    \caption{Phase 2: Federated Training Loop (Steps 8-16) - Iterative local training and central aggregation}
+    \label{fig:methodology_phase2}
+\end{sidewaysfigure}
 
 \subsection{Client-Side Training and Local Model Management}
 \label{ssec:client_training}
@@ -90,6 +82,13 @@ Following local training, the focus shifts to the central server for aggregation
 \label{sec:finalization_phase}
 
 The Finalization Phase, depicted in Figure \ref{fig:methodology_phase3}, marks the conclusion of the federated learning process. Its primary objectives are to securely deliver the collaboratively trained final model and to release the resources utilized during the process.
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase3_Final.png}
+    \caption{Phase 3: Finalization Phase (Steps 17-18) - Model delivery and resource release}
+    \label{fig:methodology_phase3}
+\end{sidewaysfigure}
 
 \subsection{Secure Model Delivery and Verification}
 \label{ssec:model_delivery}
