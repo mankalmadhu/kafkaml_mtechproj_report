@@ -82,25 +82,26 @@ Following the literature review, the summary is provided in Table~\ref{tab:lit_s
 
 %\begin{longtable}
 \begin{sidewaystable}
-\footnotesize
+\scriptsize
 \centering
 \caption{Literature Survey Summary}
-\label{tab:lit_survey_summary} 
-\begin{tabular}{|@{}p{0.25\textwidth}|c|c|c|c|c|c|c|c|c|c|c|c|@{}} % Adjusted column widths
+\label{tab:lit_survey_summary}
+\begin{adjustbox}{width=\textwidth,center}
+\begin{tabular}{|@{}p{0.18\textwidth}|c|*{12}{c|}@{}} % Adjusted column widths
     \toprule
     \textbf{Paper Title} &
-    \textbf{Publication Year} &
+    \textbf{Year} &
     \textbf{FL} &
-    \textbf{Blockchain} &
-    \textbf{Trustworthiness} &
-    \textbf{XAI / Explainability} &
-    \textbf{Accountability (BC)} &
-    \textbf{Fairness (BC/Sampler)} &
-    \textbf{Comm. Efficiency} &
-    \textbf{Real-Time Streams} &
-    \textbf{Smart Contracts} &
+    \textbf{BC} &
+    \textbf{Trust} &
+    \textbf{XAI} &
+    \textbf{Acc. (BC)} &
+    \textbf{Fair} &
+    \textbf{Comm.} &
+    \textbf{Streams} &
+    \textbf{SC} &
     \textbf{FedAvg} &
-    \textbf{Building Occupancy} \\
+    \textbf{Occ.} \\
     \midrule
    
      
@@ -132,10 +133,13 @@ We Know and What is Left to Attain Trustwor-
 thy Artificial Intelligence &
     2023 &   &   & x & x &   &   &   &   &   &   &   \\
     % --- End of data ---
-    \toprule
+        \toprule
 \end{tabular}
+\end{adjustbox}
 
 \end{sidewaystable}
+
+\noindent\textit{Legend:} BC = Blockchain, Trust = Trustworthiness, XAI = Explainable AI, Acc. = Accountability, Fair = Fairness (via BC/Sampler), Comm. = Communication Efficiency, SC = Smart Contracts, Occ. = Building Occupancy.
 
 
 
