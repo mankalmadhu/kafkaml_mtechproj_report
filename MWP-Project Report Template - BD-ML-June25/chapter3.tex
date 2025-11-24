@@ -14,35 +14,23 @@ The process depicted in Figure \ref{fig:methodology_flow} is logically divided i
 
 \begin{sidewaysfigure}[htbp]
     \centering
-    \includegraphics[scale=0.185]{MWP-Project Report Template - BD-ML-June25/methodology.png}
-    
-    \vspace{0.5cm}
-    
-    % Phase legend/key - stacked vertically for better readability
-    \begin{center}
-    \begin{tikzpicture}
-        % Phase 1 box
-        \node[draw=blue!60,fill=blue!20,line width=1.5pt,rounded corners=3pt,
-              text=blue!90!black,font=\bfseries,minimum width=18cm,minimum height=0.6cm,
-              align=center] at (0,1.2) 
-            {\textbf{Phase 1: Initialization} (Steps 1-7)};
-        
-        % Phase 2 box  
-        \node[draw=red!60,fill=red!20,line width=1.5pt,rounded corners=3pt,
-              text=red!90!black,font=\bfseries,minimum width=18cm,minimum height=0.6cm,
-              align=center] at (0,0.3) 
-            {\textbf{Phase 2: Federated Training Loop} (Steps 8-16)};
-        
-        % Phase 3 box
-        \node[draw=green!60,fill=green!20,line width=1.5pt,rounded corners=3pt,
-              text=green!90!black,font=\bfseries,minimum width=18cm,minimum height=0.6cm,
-              align=center] at (0,-0.6) 
-            {\textbf{Phase 3: Finalization} (Steps 17-18)};
-    \end{tikzpicture}
-    \end{center}
-    
-    \caption{Methodology Flow Diagram with Phase Identification - The complete process flow showing all interactions and data exchanges. The diagram is logically divided into three sequential phases as indicated by the horizontal dividers and phase markers: \textcolor{blue!90!black}{\textbf{Initialization}} (top section), \textcolor{red!90!black}{\textbf{Federated Training Loop}} (middle section with loop indicator), and \textcolor{green!90!black}{\textbf{Finalization}} (bottom section). The narrative continuity is preserved, illustrating the complete end-to-end federated learning process.}
-    \label{fig:methodology_phases}
+    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Federated_Full.png}
+    \caption{Complete Methodology Flow Diagram - Overview of all three phases and their interactions}
+    \label{fig:methodology_full}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase1_Init.png}
+    \caption{Phase 1: Initialization Phase (Steps 1-7) - Setup, model deployment, and blockchain registration}
+    \label{fig:methodology_phase1}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{MWP-Project Report Template - BD-ML-June25/methodology_images/KafkaML_Phase2_Loop.png}
+    \caption{Phase 2: Federated Training Loop (Steps 8-16) - Iterative local training and central aggregation}
+    \label{fig:methodology_phase2}
 \end{sidewaysfigure}
 
 
@@ -50,7 +38,7 @@ The process depicted in Figure \ref{fig:methodology_flow} is logically divided i
 \section{Initialization Phase}
 \label{sec:initialization_phase}
 
-The Initialization Phase, depicted in the top block of Figure \ref{fig:methodology_flow}, focuses on setting up the environment for federated learning. Its primary objective is to prepare the initial global model, ready participating clients for training, and securely register baseline model weights.
+The Initialization Phase, depicted in Figure \ref{fig:methodology_phase1}, focuses on setting up the environment for federated learning. Its primary objective is to prepare the initial global model, ready participating clients for training, and securely register baseline model weights.
 
 \subsection{Key Actors and Their Roles}
 \label{ssec:init_actors}
@@ -73,7 +61,7 @@ The sequence of events in the Initialization Phase is as follows:
 \section{Federated Training Loop}
 \label{sec:training_loop}
 
-The Federated Training Loop, central to the diagram in Figure \ref{fig:methodology_flow}, represents the iterative core of the federated learning process. Its main purpose is to collaboratively improve the global model by leveraging local training on client data, while rigorously preserving data privacy. This loop is repeated until predefined convergence criteria or a maximum number of training rounds are met.
+The Federated Training Loop, depicted in Figure \ref{fig:methodology_phase2}, represents the iterative core of the federated learning process. Its main purpose is to collaboratively improve the global model by leveraging local training on client data, while rigorously preserving data privacy. This loop is repeated until predefined convergence criteria or a maximum number of training rounds are met.
 
 \subsection{Client-Side Training and Local Model Management}
 \label{ssec:client_training}
@@ -101,7 +89,7 @@ Following local training, the focus shifts to the central server for aggregation
 \section{Finalization Phase}
 \label{sec:finalization_phase}
 
-The Finalization Phase, shown in the bottom block of Figure \ref{fig:methodology_flow}, marks the conclusion of the federated learning process. Its primary objectives are to securely deliver the collaboratively trained final model and to release the resources utilized during the process.
+The Finalization Phase, shown in the bottom section of Figure \ref{fig:methodology_full}, marks the conclusion of the federated learning process. Its primary objectives are to securely deliver the collaboratively trained final model and to release the resources utilized during the process.
 
 \subsection{Secure Model Delivery and Verification}
 \label{ssec:model_delivery}
