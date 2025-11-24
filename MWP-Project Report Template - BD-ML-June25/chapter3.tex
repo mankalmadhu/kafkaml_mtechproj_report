@@ -2,15 +2,8 @@
 
 \section{Overview}
 
-The process depicted in Figure \ref{fig:methodology_flow} is logically divided into three distinct and sequential phases: the Initialization Phase, the Federated Training Loop, and the Finalization Phase. Each phase orchestrates specific interactions between the central server, the data exchange components (including the Ethereum Blockchain and Platform Kafka), and the various client-side elements. The Initialization Phase focuses on setting up the environment and preparing the initial global model, as well as securely registering baseline model weights. Following this, the Federated Training Loop represents the iterative core of the system, where local training on client data is combined with central aggregation to collaboratively improve the global model while preserving data privacy. Finally, the Finalization Phase concludes the process by delivering the trained model and ensuring that all contributions are fairly accounted for through blockchain verification, followed by the release of resources. The subsequent sections will detail each of these phases, outlining the key actors involved and the sequence of operations.
+The process depicted in Figure \ref{fig:methodology_full} is logically divided into three distinct and sequential phases: the Initialization Phase, the Federated Training Loop, and the Finalization Phase. Each phase orchestrates specific interactions between the central server, the data exchange components (including the Ethereum Blockchain and Platform Kafka), and the various client-side elements. The Initialization Phase focuses on setting up the environment and preparing the initial global model, as well as securely registering baseline model weights. Following this, the Federated Training Loop represents the iterative core of the system, where local training on client data is combined with central aggregation to collaboratively improve the global model while preserving data privacy. Finally, the Finalization Phase concludes the process by delivering the trained model and ensuring that all contributions are fairly accounted for through blockchain verification, followed by the release of resources. The subsequent sections will detail each of these phases, outlining the key actors involved and the sequence of operations.
 
-
-\begin{sidewaysfigure}[htbp]
-    \centering
-    \includegraphics[scale=0.185]{MWP-Project Report Template - BD-ML-June25/methodology.png} % Include your image
-    \caption{Methodology Flow Diagram - Complete Process Flow}
-    \label{fig:methodology_flow} % A unique label for cross-referencing this specific figure
-\end{sidewaysfigure}
 
 \begin{figure}[htbp]
     \centering
